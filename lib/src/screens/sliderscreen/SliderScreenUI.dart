@@ -162,12 +162,13 @@ class SliderTile extends StatelessWidget{
   @override
   Widget build(BuildContext context) {
     return Container(
+      width: MediaQuery.of(context).size.width,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
           Image.asset(
             imagePath,
-            height: MediaQuery.of(context).size.height/2.3,
+            height: MediaQuery.of(context).size.height/2.5,
           ),
           SizedBox(height: Sizes.s20),
           Container(

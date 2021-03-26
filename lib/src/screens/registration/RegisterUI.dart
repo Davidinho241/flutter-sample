@@ -1,3 +1,4 @@
+import 'package:coinpay/src/services/prefs_service.dart';
 import 'package:coinpay/src/utils/colors.dart';
 import 'package:coinpay/src/widgets/texts.dart';
 import 'package:flutter/material.dart';
@@ -8,7 +9,6 @@ import 'package:flutter_icons/flutter_icons.dart';
 import 'package:coinpay/src/helpers/validation.dart';
 import 'package:coinpay/src/helpers/localization.dart';
 import 'package:coinpay/src/helpers/navigation.dart';
-import 'package:coinpay/src/helpers/toast.dart';
 import 'package:coinpay/src/models/User.dart';
 import 'package:coinpay/src/screens/login/LoginUI.dart';
 import 'package:coinpay/src/screens/validate_otp/ValidateOtpUI.dart';
@@ -18,6 +18,7 @@ import 'package:coinpay/src/widgets/inputs.dart';
 import 'package:coinpay/src/controllers/UserController.dart';
 import 'package:coinpay/src/env/routes.dart';
 import 'package:typicons_flutter/typicons_flutter.dart';
+import 'package:coinpay/src/helpers/dialog.dart';
 
 class RegisterUI extends StatefulWidget {
   @override
@@ -71,7 +72,9 @@ class _RegisterUIState extends State<RegisterUI> {
       Row(
         children: <Widget>[
           CountryPickerUtils.getDefaultFlagImage(country),
-          SizedBox(width: 8.0),
+          SizedBox(width: 2.0),
+          Icon(Icons.keyboard_arrow_down),
+          SizedBox(width: 5.0),
           Text("+${country.phoneCode}"),
           SizedBox(width: 8.0),
           showCountryName ? Flexible(child: Text(country.name)) : Container()
@@ -270,40 +273,58 @@ class _RegisterUIState extends State<RegisterUI> {
                 ),
                 Align(
                   alignment: Alignment.bottomLeft,
-                  child: Row(
-                    children: [
-                      Checkbox(
-                        value: isValidateTermsAndPolicy,
-                        onChanged: (value) => {
-                          print(value)
-                        }
-                      ),
-                      TextParagraph(
-                        data: "${lang.translate('screen.register.agreeAlt')}",
-                        size: Sizes.s10,
-                        weight: FontWeight.w400,
-                      ),
-                      TextParagraph(
-                        data: "${lang.translate('screen.register.termsOfServicesAlt')}",
-                        size: Sizes.s10,
-                        weight: FontWeight.w400,
-                      ),
-                      TextParagraph(
-                        data: "${lang.translate('screen.register.andAlt')}",
-                        size: Sizes.s10,
-                        weight: FontWeight.w400,
-                      ),
-                      TextParagraph(
-                        data: "${lang.translate('screen.register.privacyPolicyAlt')}",
-                        size: Sizes.s10,
-                        weight: FontWeight.w400,
-                      ),
-                      TextParagraph(
-                        data: "${lang.translate('screen.register.foulStop')}",
-                        size: Sizes.s10,
-                        weight: FontWeight.w400,
-                      ),
-                    ],
+                  child: Container(
+                    width: double.maxFinite,
+                    child: Row(
+                      children: [
+                        Checkbox(
+                          materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                          activeColor: secondaryColor,
+                          checkColor: secondaryColor,
+                          value: isValidateTermsAndPolicy,
+                          onChanged: (value) => {
+                            print(value)
+                          }
+                        ),
+                        TextParagraph(
+                          data: "${lang.translate('screen.register.agreeAlt')}",
+                          size: Sizes.s9,
+                          weight: FontWeight.w400,
+                        ),
+                        InkWell(
+                          onTap: () =>{
+                            print("Terms of services")
+                          },
+                          child: TextParagraph(
+                            data: "${lang.translate('screen.register.termsOfServicesAlt')}",
+                            size: Sizes.s9,
+                            weight: FontWeight.w400,
+                            color: secondaryColor,
+                          ),
+                        ),
+                        TextParagraph(
+                          data: "${lang.translate('screen.register.andAlt')}",
+                          size: Sizes.s9,
+                          weight: FontWeight.w400,
+                        ),
+                        InkWell(
+                          onTap: () => {
+                            print("Privacy Policy")
+                          },
+                          child: TextParagraph(
+                            data: "${lang.translate('screen.register.privacyPolicyAlt')}",
+                            size: Sizes.s9,
+                            weight: FontWeight.w400,
+                            color: secondaryColor,
+                          ),
+                        ),
+                        TextParagraph(
+                          data: "${lang.translate('screen.register.foulStop')}",
+                          size: Sizes.s9,
+                          weight: FontWeight.w400,
+                        ),
+                      ],
+                    ),
                   ),
                 ),
                 SizedBox(
@@ -318,13 +339,13 @@ class _RegisterUIState extends State<RegisterUI> {
                           context: context,
                           backgroundColor: Colors.transparent,
                           isDismissible: false,
-                          builder: (BuildContext context) {
-                            return ;
+                          builder: (context) {
+                            return LinearProgressIndicator();
                           },
                         );
                         await Future.delayed(
                           Duration(milliseconds: 5000),
-                            () => UserController().register(Routes.REGISTER,
+                            () => UserController().run(Routes.REGISTER,
                                 new User(
                                     id: 0,
                                     firstName: firstNameController.text,
@@ -336,31 +357,23 @@ class _RegisterUIState extends State<RegisterUI> {
                             ).then((data) async {
                               print(data);
                               if(data['code'] == 1000){
+                                final sharedPrefService = await SharedPreferencesService.instance;
+                                await sharedPrefService.setPhone(_selectedFilteredDialogCountry.phoneCode+phoneController.text);
                                 Navigator.pop(context);
-                                openRemovePage(context, ValidateOtpUI());
+                                openRemovePage(context, ValidateOtpUI(action: "register"));
+                              }else if(data['code'] == 1002){
+                                await dialogShow(context, "Oops an error !!!", "${lang.translate('screen.register.errorPhoneValidation')}");
+                                Navigator.pop(context);
                               }else {
+                                await dialogShow(context, "Oops an error !!!", data['message']);
                                 Navigator.pop(context);
-                                await showDialog<String>(
-                                    context: context,
-                                    builder: (BuildContext context) => AlertDialog(
-                                      title: Text("Oops an error !!!"),
-                                      content: Text(data['data'].values.first[0]),
-                                    )
-                                );
                               }
                             }).catchError((onError) async{
                               print(onError);
-                              await showDialog<String>(
-                                  context: context,
-                                  builder: (BuildContext context) => AlertDialog(
-                                    title: Text("Oops an error !!!"),
-                                    content: Text(onError),
-                                  )
-                              );
+                              await dialogShow(context, "Oops an error !!!", "${lang.translate('screen.register.errorMessage')}");
+                              Navigator.pop(context);
                             }),
                         );
-
-                        showToast(_scaffoldKey, "${lang.translate('screen.register.successMessage')}");
                       }
                     },
                     fontSize: FontSize.s16,
@@ -384,7 +397,7 @@ class _RegisterUIState extends State<RegisterUI> {
                     Material(
                       color: Colors.transparent,
                       child: InkWell(
-                        onTap: () => openPage(context, LoginUI()),
+                        onTap: () => openRemovePage(context, LoginUI()),
                         child: TextParagraph(
                           data : "${lang.translate('screen.register.loginButton')}",
                           color: secondaryColor,

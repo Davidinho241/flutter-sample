@@ -23,19 +23,21 @@
             "foulStop": ".",
             "loginButton": "Login",
             "progressMessage": "Processing Registration...",
+            "errorMessage": "We got an error while trying to submit your request, please try later.",
             "successMessage": "Registration Successfully",
             "emptyFieldMessage": "This field is required",
             "invalidLengthFieldMessage": "The value could not be less than 3 characters",
             "invalidLengthPasswordMessage": "The value could not be less than 8 characters",
-            "invalidLengthPhoneMessage": "The value could not be less than 9 characters"
+            "invalidLengthPhoneMessage": "The value could not be less than 9 characters",
+            "errorPhoneValidation": "Your phone number is already use, please try another one."
         },
         "validateOTP": {
             "appBar": "Validate OTP",
             "title": "Verify your account",
-            "subtitle": "Please check your phone and enter the OTP code.",
+            "subtitle": "Please enter a 6-digit code we sent to your mobile ***50.",
             "otpHint": "OTP Code",
             "otpLabel": "OTP Code",
-            "otpButton": "Verify",
+            "otpButton": "confirm Account",
             "otpSuccess": "OTP verify Successfully",
             "progressMessage": "Processing verification...",
             "emptyFieldMessage": "This field is required",
@@ -43,7 +45,8 @@
         },
         "login": {
             "appBar": "Login",
-            "skip": "Skip",
+            "title": "Welcome back!",
+            "subtitle": "We are so happy to see! You can Log in and continue to manage your coins.",
             "emailHint": "Email ID",
             "emailLabel": "Email ID",
             "passwordHint": "Password",
@@ -52,8 +55,9 @@
             "loginButton": "Login",
             "loginSuccess": "Login Successfully",
             "loginAlt": "Or login with",
-            "noAccountAlt": "Don't have an account yet? ",
-            "registerButton": "Register"
+            "noAccountAlt": "Don't have an account? ",
+            "registerButton": "Create account",
+            "progressMessage": "Processing login..."
         },
         "dashboard": {
             "firstAppBar": "Find Hotel Tonight",
@@ -77,12 +81,6 @@
             "findTag": "Find Hotels by Price",
             "lessThan": "Less than",
             "moreThan": "More than"
-        },
-        "hotelList": {
-            "searchHint": "Search by location",
-            "mapButton": "Show in map",
-            "guest": "Guest",
-            "room": "Room"
         },
         "filter": {
             "appBar": "Filter Hotels",
@@ -199,54 +197,6 @@
             "privacyPolicySubtitle": "App privacy & policy",
             "tosTitle": "Terms of Service",
             "tosSubtitle": "App Terms of Service"
-        },
-        "referal": {
-            "appBar": "Invite Friends",
-            "title": "Invite Now",
-            "subtitle": "Invite all your friends and get the benefits.",
-            "copyButton": "copy",
-            "bodyTitle": "Get this benefit",
-            "b1title": "You got 50,000 points",
-            "b1subtitle": "For every new user registered with your referal code",
-            "b2title": "Your friends got 100,000 points",
-            "b2subtitle": "When they're completing full registration",
-            "b3title": "You got 20% coupon discount",
-            "b3subtitle": "When there was 5 friends register in this app",
-            "b4title": "You got 50% discount hotel",
-            "b4subtitle": "When there was 1 friend booking a hotel from this app"
-        },
-        "detail": {
-            "mapButton": "Maps",
-            "fromTxt": "from",
-            "reviewsTxt": "Reviews",
-            "reviewsTitle": "Reviews",
-            "viewAllReviews": "View All Reviews",
-            "descriptionTitle": "Description",
-            "readMoreTxt": "Read more",
-            "readLessTxt": "Read less",
-            "facilityTitle": "Facility",
-            "travelDateTitle": "Travel dates & Guest",
-            "checkInTag": "Check In",
-            "nightTag": "Night",
-            "checkOutTag": "Check Out",
-            "detailsTag": "Details",
-            "guestTag": "Guests",
-            "roomTag": "Rooms",
-            "availableRoomTitle": "Available Rooms",
-            "propertyPolicyTitle": "Property Policy",
-            "relatedHotelTitle": "Related Hotels"
-        },
-        "room": {
-            "bed": "Bed",
-            "description": "Description",
-            "facility": "Facilities",
-            "onlyRoom": "Only Room",
-            "bookButton": "Book Now"
-        },
-        "topup": {
-            "appBar": "Topup Balance",
-            "nominal": "Nominal",
-            "paymentMethod": "Payment Method"
         },
         "wallet": {
             "appBar": "Wallet",

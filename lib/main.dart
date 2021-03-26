@@ -17,6 +17,7 @@ void main() => runApp(MultiBlocProvider(providers: [
   ),
 ], child: App()));
 
+
 class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -38,6 +39,7 @@ class App extends StatelessWidget {
                 themeMode: themeState.themeMode,
                 theme: buildThemeLight(context),
                 home: SplashscreenUI(),
+                debugShowCheckedModeBanner : false,
               );
             });
       },

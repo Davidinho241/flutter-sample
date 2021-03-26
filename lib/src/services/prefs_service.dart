@@ -4,6 +4,10 @@ class SharedPrefKeys {
   SharedPrefKeys._();
   static const String currencyCode = 'currencyCode';
   static const String languageCode = 'languageCode';
+  static const String token = 'token';
+  static const String phone = 'phone';
+  static const String userId = 'userId';
+  static const String password = 'password';
 }
 
 class SharedPreferencesService {
@@ -35,4 +39,23 @@ class SharedPreferencesService {
 
   String get languageCode =>
       _preferences.getString(SharedPrefKeys.languageCode);
+
+
+  Future<void> setToken(String token) async =>
+      await _preferences.setString(SharedPrefKeys.token, token);
+
+  String get token =>
+      _preferences.getString(SharedPrefKeys.token) ?? "\$";
+
+  Future<void> setPhone(String phone) async =>
+      await _preferences.setString(SharedPrefKeys.phone, phone);
+
+  String get phone =>
+      _preferences.getString(SharedPrefKeys.phone) ?? "\$";
+
+  Future<void> setUserId(int userId) async =>
+      await _preferences.setInt(SharedPrefKeys.userId, userId);
+
+  String get userId =>
+      _preferences.getString(SharedPrefKeys.userId) ?? "\$";
 }

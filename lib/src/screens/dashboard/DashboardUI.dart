@@ -51,7 +51,20 @@ class _DashboardUIState extends State<DashboardUI> {
                 ],
               ),
             )
-          : null,
+          : AppBar(
+              elevation: 0,
+              title: Text(
+                "CoinPay",
+                style: TextStyle(
+                  fontSize: FontSize.s16,
+                  color: Theme.of(context)
+                      .textTheme
+                      .subtitle1
+                      .color
+                      .withOpacity(.7),
+                ),
+              ),
+            ),
       body: IndexedStack(
         index: currentIndex,
         children: <Widget>[

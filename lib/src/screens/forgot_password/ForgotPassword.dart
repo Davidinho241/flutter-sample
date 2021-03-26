@@ -3,7 +3,6 @@ import 'package:coinpay/src/env/routes.dart';
 import 'package:coinpay/src/helpers/dialog.dart';
 import 'package:coinpay/src/helpers/localization.dart';
 import 'package:coinpay/src/helpers/navigation.dart';
-import 'package:coinpay/src/screens/forgot_password/ForgotPassword.dart';
 import 'package:coinpay/src/screens/registration/RegisterUI.dart';
 import 'package:coinpay/src/screens/validate_otp/ValidateOtpUI.dart';
 import 'package:coinpay/src/services/prefs_service.dart';
@@ -19,12 +18,12 @@ import 'package:country_pickers/country_picker_dialog.dart';
 import 'package:country_pickers/utils/utils.dart';
 import 'package:coinpay/src/helpers/validation.dart';
 
-class LoginUI extends StatefulWidget {
+class ForgotPasswordUI extends StatefulWidget {
   @override
-  _LoginUIState createState() => _LoginUIState();
+  _ForgotPasswordUIState createState() => _ForgotPasswordUIState();
 }
 
-class _LoginUIState extends State<LoginUI> {
+class _ForgotPasswordUIState extends State<ForgotPasswordUI> {
   final phoneController = TextEditingController();
   final passwordController = TextEditingController();
   FocusNode inputPhoneFocus;
@@ -181,48 +180,6 @@ class _LoginUIState extends State<LoginUI> {
                   ],
                 ),
                 SizedBox(
-                  height: Sizes.s15,
-                ),
-                OutlineTextField(
-                  obscureText: _obscurePassword,
-                  hintText: "${lang.translate('screen.register.passwordHint')}",
-                  labelText: "${lang.translate('screen.register.passwordLabel')}",
-                  hintStyle: TextStyle(fontSize: FontSize.s14),
-                  labelStyle: TextStyle(fontSize: FontSize.s14),
-                  textInputType: TextInputType.visiblePassword,
-                  suffixIcon: IconButton(
-                    icon: _obscurePassword
-                        ? Icon(FlutterIcons.eye_fea, color: inputHint,)
-                        : Icon(FlutterIcons.eye_off_fea, color: inputHint,),
-                    onPressed: () {
-                      setState(() {
-                        _obscurePassword = _obscurePassword ? false : true;
-                      });
-                    },
-                  ),
-                  prefixIcon: Icon(
-                    FlutterIcons.lock_outline_mdi,
-                    color: inputHint,
-                  ),
-                  controller: passwordController,
-                  validator: _validatePassword,
-                ),
-                SizedBox(
-                  height: Sizes.s10,
-                ),
-                Align(
-                  alignment: Alignment.bottomRight,
-                  child: InkWell(
-                    onTap: () => openRemovePage(context, ForgotPasswordUI()),
-                    child: TextParagraph(
-                      data: "${lang.translate('screen.login.forgotLabel')}",
-                      color: secondaryColor,
-                      weight: FontWeight.w500,
-                      size: Sizes.s14,
-                    ),
-                  ),
-                ),
-                SizedBox(
                   height: Sizes.s20,
                 ),
                 Container(
@@ -241,10 +198,9 @@ class _LoginUIState extends State<LoginUI> {
                       await Future.delayed(
                         Duration(milliseconds: 5000),
                             () => UserController().run(
-                            Routes.LOGIN,
+                            Routes.FORGOT_PASSWORD,
                             {
                               "phone": _selectedFilteredDialogCountry.phoneCode+phoneController.text,
-                              "password": passwordController.text,
                             }
                         ).then((data) async {
                           print(data);
@@ -252,7 +208,7 @@ class _LoginUIState extends State<LoginUI> {
                             final sharedPrefService = await SharedPreferencesService.instance;
                             await sharedPrefService.setPhone(_selectedFilteredDialogCountry.phoneCode+phoneController.text);
                             Navigator.pop(context);
-                            openRemovePage(context, ValidateOtpUI(action: "login"));
+                            openRemovePage(context, ValidateOtpUI(action: "forgot_password"));
                           }else if(data['code'] == 1002){
                             await dialogShow(context, "Oops an error !!!", "${lang.translate('screen.register.errorPhoneValidation')}");
                             Navigator.pop(context);

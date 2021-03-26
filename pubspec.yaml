@@ -38,6 +38,7 @@ dependencies:
   vnum: ^1.2.6
   country_pickers: ^2.0.0
   typicons_flutter: ^0.4.2
+  pin_code_fields: ^7.0.0
 
 flutter_icons:
   android: true

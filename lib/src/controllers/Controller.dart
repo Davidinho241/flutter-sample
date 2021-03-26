@@ -9,6 +9,7 @@ class Controller extends ControllerMVC{
 
   Future<http.Response> makeRequest(String route, Map<String, dynamic> data) async{
     print('route: ' +Routes().buildRoute(route));
+    print('data: ' +data.toString());
     return await http.post(
       Routes().buildRoute(route),
       headers: <String, String>{
