@@ -7,6 +7,14 @@ Future<bool> dialogShow(BuildContext context, String title, String content) asyn
       return AlertDialog(
         title: Text(title),
         content: Text(content),
+        actions: <Widget>[
+          TextButton(
+            child: Text('Ok'),
+            onPressed: () {
+              Navigator.pop(context, false);
+            },
+          ),
+        ],
       );
     },
   ) ?? false;

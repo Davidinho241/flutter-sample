@@ -1,4 +1,5 @@
 import 'package:coinpay/src/helpers/dialog.dart';
+import 'package:coinpay/src/helpers/modal.dart';
 import 'package:coinpay/src/screens/reset_password/ResetPassword.dart';
 import 'package:coinpay/src/utils/colors.dart';
 import 'package:coinpay/src/utils/sizes.dart';
@@ -14,6 +15,7 @@ import 'package:coinpay/src/screens/dashboard/DashboardUI.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 
+// ignore: must_be_immutable
 class ValidateOtpUI extends StatefulWidget {
   String action;
 
@@ -25,6 +27,8 @@ class ValidateOtpUI extends StatefulWidget {
 
 class _ValidateOtpUIState extends State<ValidateOtpUI> {
   var _scaffoldKey = GlobalKey<ScaffoldState>();
+  final _formKey = GlobalKey<FormState>();
+  PersistentBottomSheetController persistentBottomSheetController;
   String action = "null";
 
   final otpController = TextEditingController();
@@ -53,169 +57,154 @@ class _ValidateOtpUIState extends State<ValidateOtpUI> {
         width: double.maxFinite,
         height: double.maxFinite,
         child: SingleChildScrollView(
-          child: Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: <Widget>[
-                SizedBox(
-                  height: Sizes.s70,
-                ),
-                Align(
-                  alignment: Alignment.bottomLeft,
-                  child: Text(
-                    "${lang.translate('screen.validateOTP.title')}",
-                    style: TextStyle(
-                      fontWeight: FontWeight.w600,
-                      fontSize: FontSize.s20,
+          padding: EdgeInsets.all(Sizes.s8),
+          child: Form(
+            key: _formKey,
+            child: Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: <Widget>[
+                  SizedBox(
+                    height: Sizes.s70,
+                  ),
+                  Align(
+                    alignment: Alignment.bottomLeft,
+                    child: Text(
+                      "${lang.translate('screen.validateOTP.title')}",
+                      style: TextStyle(
+                        fontWeight: FontWeight.w600,
+                        fontSize: FontSize.s20,
+                      ),
                     ),
                   ),
-                ),
-                Align(
-                  alignment: Alignment.bottomLeft,
-                  child: Text(
-                    "${lang.translate('screen.validateOTP.subtitle')}",
-                    style: TextStyle(
+                  Align(
+                    alignment: Alignment.bottomLeft,
+                    child: Text(
+                      "${lang.translate('screen.validateOTP.subtitle')}",
+                      style: TextStyle(
+                        fontSize: FontSize.s14,
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    height: Sizes.s30,
+                  ),
+                  Image.asset(
+                    "assets/images/misc/referal.png",
+                    height: Sizes.s300,
+                    width: Sizes.s500,
+                  ),
+                  SizedBox(
+                    height: Sizes.s20,
+                  ),
+                  PinCodeTextField(
+                    appContext: context,
+                    length: 6,
+                    controller: otpController,
+                    textStyle: GoogleFonts.heebo(
                       fontSize: FontSize.s14,
+                      fontStyle: FontStyle.normal,
+                      fontWeight: FontWeight.w400,
+                    ),
+                    pinTheme: PinTheme(
+                        shape: PinCodeFieldShape.box,
+                        borderRadius: BorderRadius.circular(Sizes.s10),
+                        fieldHeight: Sizes.s50,
+                        fieldWidth: Sizes.s50,
+                        activeFillColor: Colors.indigoAccent,
+                        selectedFillColor: Colors.indigo
+                    ),
+                    cursorColor: Colors.black,
+                    animationDuration: Duration(milliseconds: 300),
+                    keyboardType: TextInputType.number,
+                    boxShadows: [
+                      BoxShadow(
+                        offset: Offset(0, 1),
+                        color: inputBg,
+                        blurRadius: Sizes.s10,
+                      )
+                    ],
+                    beforeTextPaste: (text) {
+                      print("Allowing to paste $text");
+                      //if you return true then it will show the paste confirmation dialog. Otherwise if false, then nothing will happen.
+                      //but you can show anything you want here, like your pop up saying wrong paste format or etc
+                      return true;
+                    },
+                    validator: _validateField,
+                    onChanged: (String value){},
+
+                  ),
+                  SizedBox(
+                    height: Sizes.s15,
+                  ),
+                  Container(
+                    height: Sizes.s40,
+                    child: action == "forgot_password" ?
+                    ButtonSystemTheme(
+                      title: "${lang.translate('screen.validateOTP.otpButton')}",
+                      onTap: () async {
+                        if(_formKey.currentState.validate()){
+                          openRemovePage(context, ResetPasswordUI(code: otpController.text));
+                        }
+                      },
+                      fontSize: FontSize.s16,
+                      weight: FontWeight.w500,
+                      height: Sizes.s48,
+                      width: MediaQuery.of(context).size.width,
+                      color: secondaryColor,
+                    ): ButtonSystemTheme(
+                      title: "${lang.translate('screen.validateOTP.otpButton')}",
+                      onTap: () async {
+                        if(_formKey.currentState.validate()){
+                          persistentBottomSheetController = _scaffoldKey.currentState.showBottomSheet((context) =>
+                              Container(
+                                child: CustomModal.loading(context, "${lang.translate('screen.register.progressMessage')}"),
+                              )
+                          );
+                          final sharedPrefService = await SharedPreferencesService.instance;
+                          await Future.delayed(
+                            Duration(milliseconds: 5000),
+                                ()  =>  UserController().run(
+                                action == "login" ? Routes.LOGIN_VERIFY_OTP : Routes.VERIFY_OTP ,
+                                {
+                                  "phone": sharedPrefService.phone,
+                                  "code": otpController.text,
+                                }
+                            ).then((data) async {
+                                  print(data);
+                                  if(data['code'] == 1000){
+                                    final sharedPrefService = await SharedPreferencesService.instance;
+                                    await sharedPrefService.setToken(data['token']);
+                                    openRemovePage(context, DashboardUI());
+                                  }else if(data['code'] == 1002){
+                                    await dialogShow(context, "Oops an error !!!", "${lang.translate('screen.register.errorPhoneValidation')}");
+                                  }else {
+                                    await dialogShow(context, "Oops an error !!!", data['message']);
+                                  }
+                                }).catchError((onError) async{
+                                  print(onError);
+                                  await dialogShow(context, "Oops an error !!!", "${lang.translate('screen.register.errorMessage')}");
+                                }).whenComplete(() => {
+                                  setState(()=>{
+                                    print('Data receive'),
+                                  })
+                                }),
+                          ).whenComplete(() => {
+                            persistentBottomSheetController.close(),
+                            print("Future closed")
+                          });
+                        }
+                      },
+                      fontSize: FontSize.s16,
+                      weight: FontWeight.w500,
+                      height: Sizes.s48,
+                      width: MediaQuery.of(context).size.width,
+                      color: secondaryColor,
                     ),
                   ),
-                ),
-                SizedBox(
-                  height: Sizes.s30,
-                ),
-                Image.asset(
-                  "assets/images/misc/referal.png",
-                  height: Sizes.s300,
-                  width: Sizes.s500,
-                ),
-                SizedBox(
-                  height: Sizes.s20,
-                ),
-                PinCodeTextField(
-                  appContext: context,
-                  length: 6,
-                  controller: otpController,
-                  textStyle: GoogleFonts.heebo(
-                    fontSize: FontSize.s14,
-                    fontStyle: FontStyle.normal,
-                    fontWeight: FontWeight.w400,
-                  ),
-                  pinTheme: PinTheme(
-                    shape: PinCodeFieldShape.box,
-                    borderRadius: BorderRadius.circular(Sizes.s10),
-                    fieldHeight: Sizes.s50,
-                    fieldWidth: Sizes.s50,
-                    activeFillColor: Colors.indigoAccent,
-                    selectedFillColor: Colors.indigo
-                  ),
-                  cursorColor: Colors.black,
-                  animationDuration: Duration(milliseconds: 300),
-                  keyboardType: TextInputType.number,
-                  boxShadows: [
-                    BoxShadow(
-                      offset: Offset(0, 1),
-                      color: inputBg,
-                      blurRadius: Sizes.s10,
-                    )
-                  ],
-                  onCompleted: (v) {
-                    print("Completed");
-                    print(otpController.text);
-                  },
-                  // onTap: () {
-                  //   print("Pressed");
-                  // },
-                  onChanged: (value) {
-                    print(value);
-                    setState(() {
-                      print(value);
-                    });
-                  },
-                  beforeTextPaste: (text) {
-                    print("Allowing to paste $text");
-                    //if you return true then it will show the paste confirmation dialog. Otherwise if false, then nothing will happen.
-                    //but you can show anything you want here, like your pop up saying wrong paste format or etc
-                    return true;
-                  },
-
-                ),
-                SizedBox(
-                  height: Sizes.s15,
-                ),
-                Container(
-                  height: Sizes.s40,
-                  child: action == "forgot_password" ?
-                  ButtonSystemTheme(
-                    title: "${lang.translate('screen.validateOTP.otpButton')}",
-                    onTap: () async {
-                      showModalBottomSheet<void>(
-                        context: context,
-                        backgroundColor: Colors.transparent,
-                        isDismissible: false,
-                        builder: (context) {
-                          return LinearProgressIndicator();
-                        },
-                      );
-                      await Future.delayed(
-                        Duration(milliseconds: 5000),
-                          () => {
-                            Navigator.pop(context),
-                            openRemovePage(context, ResetPasswordUI(code: otpController.text))
-                          }
-                      );
-                    },
-                    fontSize: FontSize.s16,
-                    weight: FontWeight.w500,
-                    height: Sizes.s48,
-                    width: MediaQuery.of(context).size.width,
-                    color: secondaryColor,
-                  )
-                      : ButtonSystemTheme(
-                    title: "${lang.translate('screen.validateOTP.otpButton')}",
-                    onTap: () async {
-                      showModalBottomSheet<void>(
-                        context: this.context,
-                        backgroundColor: Colors.transparent,
-                        isDismissible: false,
-                        builder: (BuildContext context) {
-                          return LinearProgressIndicator();
-                        },
-                      );
-                      final sharedPrefService = await SharedPreferencesService.instance;
-                      await Future.delayed(
-                        Duration(milliseconds: 5000),
-                            () => UserController().run(
-                            action == "login" ? Routes.LOGIN_VERIFY_OTP : Routes.VERIFY_OTP ,
-                            {
-                              "phone": sharedPrefService.phone,
-                              "code": otpController.text,
-                            }
-                        ).then((data) async {
-                          print(data);
-                          if(data['code'] == 1000){
-                            final sharedPrefService = await SharedPreferencesService.instance;
-                            await sharedPrefService.setToken(data['token']);
-                            Navigator.pop(context);
-                            openRemovePage(context, DashboardUI());
-                          }else {
-                            await dialogShow(context, "Oops an error !!!", data['message']);
-                            Navigator.pop(context);
-                          }
-                        }).catchError((onError) async{
-                          print(onError);
-                          await dialogShow(context, "Oops an error !!!", "${lang.translate('screen.register.errorMessage')}");
-                          Navigator.pop(context);
-                        }),
-                      );
-                    },
-                    fontSize: FontSize.s16,
-                    weight: FontWeight.w500,
-                    height: Sizes.s48,
-                    width: MediaQuery.of(context).size.width,
-                    color: secondaryColor,
-                  ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ),

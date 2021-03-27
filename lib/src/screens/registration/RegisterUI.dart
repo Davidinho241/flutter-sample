@@ -1,3 +1,4 @@
+import 'package:coinpay/src/helpers/modal.dart';
 import 'package:coinpay/src/services/prefs_service.dart';
 import 'package:coinpay/src/utils/colors.dart';
 import 'package:coinpay/src/widgets/texts.dart';
@@ -36,6 +37,7 @@ class _RegisterUIState extends State<RegisterUI> {
   FocusNode inputPasswordFocus;
 
   var _scaffoldKey = GlobalKey<ScaffoldState>();
+  PersistentBottomSheetController persistentBottomSheetController;
   bool status = false;
   bool enable = true;
   bool isValidateTermsAndPolicy = false;
@@ -335,17 +337,14 @@ class _RegisterUIState extends State<RegisterUI> {
                     title: "${lang.translate('screen.register.registerButton')}",
                     onTap: () async {
                       if (_formKey.currentState.validate()) {
-                        showModalBottomSheet<void>(
-                          context: context,
-                          backgroundColor: Colors.transparent,
-                          isDismissible: false,
-                          builder: (context) {
-                            return LinearProgressIndicator();
-                          },
+                        persistentBottomSheetController = _scaffoldKey.currentState.showBottomSheet((context) =>
+                            Container(
+                              child: CustomModal.loading(context, "${lang.translate('screen.register.progressMessage')}"),
+                            )
                         );
                         await Future.delayed(
                           Duration(milliseconds: 5000),
-                            () => UserController().run(Routes.REGISTER,
+                            () async => await UserController().run(Routes.REGISTER,
                                 new User(
                                     id: 0,
                                     firstName: firstNameController.text,
@@ -359,21 +358,24 @@ class _RegisterUIState extends State<RegisterUI> {
                               if(data['code'] == 1000){
                                 final sharedPrefService = await SharedPreferencesService.instance;
                                 await sharedPrefService.setPhone(_selectedFilteredDialogCountry.phoneCode+phoneController.text);
-                                Navigator.pop(context);
                                 openRemovePage(context, ValidateOtpUI(action: "register"));
                               }else if(data['code'] == 1002){
                                 await dialogShow(context, "Oops an error !!!", "${lang.translate('screen.register.errorPhoneValidation')}");
-                                Navigator.pop(context);
                               }else {
                                 await dialogShow(context, "Oops an error !!!", data['message']);
-                                Navigator.pop(context);
                               }
                             }).catchError((onError) async{
                               print(onError);
                               await dialogShow(context, "Oops an error !!!", "${lang.translate('screen.register.errorMessage')}");
-                              Navigator.pop(context);
+                            }).whenComplete(() => {
+                              setState(()=>{
+                                print('Data receive'),
+                              })
                             }),
-                        );
+                        ).whenComplete(() => {
+                          persistentBottomSheetController.close(),
+                          print("Future closed")
+                        });
                       }
                     },
                     fontSize: FontSize.s16,

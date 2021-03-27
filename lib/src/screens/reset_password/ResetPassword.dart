@@ -2,6 +2,7 @@ import 'package:coinpay/src/controllers/UserController.dart';
 import 'package:coinpay/src/env/routes.dart';
 import 'package:coinpay/src/helpers/dialog.dart';
 import 'package:coinpay/src/helpers/localization.dart';
+import 'package:coinpay/src/helpers/modal.dart';
 import 'package:coinpay/src/helpers/navigation.dart';
 import 'package:coinpay/src/screens/dashboard/DashboardUI.dart';
 import 'package:coinpay/src/screens/registration/RegisterUI.dart';
@@ -42,6 +43,7 @@ class _ResetPasswordUIState extends State<ResetPasswordUI> {
   FocusNode inputPasswordFocus;
 
   var _scaffoldKey = GlobalKey<ScaffoldState>();
+  PersistentBottomSheetController persistentBottomSheetController;
   bool status = false;
   bool enable = true;
 
@@ -188,13 +190,10 @@ class _ResetPasswordUIState extends State<ResetPasswordUI> {
                   child: ButtonSystemTheme(
                     title: "${lang.translate('screen.login.loginButton')}",
                     onTap: () async {
-                      showModalBottomSheet<void>(
-                        context: this.context,
-                        backgroundColor: Colors.transparent,
-                        isDismissible: false,
-                        builder: (BuildContext context) {
-                          return LinearProgressIndicator();
-                        },
+                      persistentBottomSheetController = _scaffoldKey.currentState.showBottomSheet((context) =>
+                          Container(
+                            child: CustomModal.loading(context, "${lang.translate('screen.register.progressMessage')}"),
+                          )
                       );
                       final sharedPrefService = await SharedPreferencesService.instance;
                       await Future.delayed(
@@ -212,21 +211,24 @@ class _ResetPasswordUIState extends State<ResetPasswordUI> {
                           if(data['code'] == 1000){
                             final sharedPrefService = await SharedPreferencesService.instance;
                             await sharedPrefService.setToken(data['token']);
-                            Navigator.pop(context);
                             openRemovePage(context, DashboardUI());
                           }else if(data['code'] == 1002){
                             await dialogShow(context, "Oops an error !!!", "${lang.translate('screen.register.errorPhoneValidation')}");
-                            Navigator.pop(context);
                           }else {
                             await dialogShow(context, "Oops an error !!!", data['message']);
-                            Navigator.pop(context);
                           }
                         }).catchError((onError) async{
                           print(onError);
                           await dialogShow(context, "Oops an error !!!", "${lang.translate('screen.register.errorMessage')}");
-                          Navigator.pop(context);
-                        }),
-                      );
+                        }).whenComplete(() => {
+                              setState(()=>{
+                                print('Data receive'),
+                              })
+                            }),
+                      ).whenComplete(() => {
+                        persistentBottomSheetController.close(),
+                        print("Future closed")
+                      });
                     },
                     fontSize: FontSize.s16,
                     weight: FontWeight.w500,
