@@ -1,9 +1,10 @@
+import 'package:flutter/material.dart';
 import 'package:coinpay/src/helpers/dialog.dart';
 import 'package:coinpay/src/helpers/modal.dart';
 import 'package:coinpay/src/screens/reset_password/ResetPassword.dart';
 import 'package:coinpay/src/utils/colors.dart';
 import 'package:coinpay/src/utils/sizes.dart';
-import 'package:flutter/material.dart';
+import 'package:coinpay/src/widgets/texts.dart';
 import 'package:coinpay/src/env/routes.dart';
 import 'package:coinpay/src/helpers/localization.dart';
 import 'package:coinpay/src/helpers/navigation.dart';
@@ -14,6 +15,7 @@ import 'package:coinpay/src/helpers/validation.dart';
 import 'package:coinpay/src/screens/dashboard/DashboardUI.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
+import 'package:slide_countdown_clock/slide_countdown_clock.dart';
 
 // ignore: must_be_immutable
 class ValidateOtpUI extends StatefulWidget {
@@ -31,9 +33,45 @@ class _ValidateOtpUIState extends State<ValidateOtpUI> {
   PersistentBottomSheetController persistentBottomSheetController;
   String action = "null";
 
+  int requestAttemptsCounter = 3;
+  Duration timeOutOtp = Duration(minutes: 3);
+  Duration waitTimeOtp = Duration(minutes: 15);
+  bool hideButton = false;
+  bool sendRefreshCode = false;
+
   final otpController = TextEditingController();
 
   _ValidateOtpUIState(this.action);
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
+  void setState(VoidCallback fn) {
+    print("requestAttemptsCounter");
+    print(requestAttemptsCounter);
+    print("hideButton");
+    print(hideButton);
+    print("sendRefreshCode");
+    print(sendRefreshCode);
+
+    super.setState(fn);
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
+
+  void onEnd() {
+    print('Timer end');
+  }
+
+  bool isAbleToSubmitCode(){
+    return true;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -68,28 +106,6 @@ class _ValidateOtpUIState extends State<ValidateOtpUI> {
                   SizedBox(
                     height: Sizes.s70,
                   ),
-                  Align(
-                    alignment: Alignment.bottomLeft,
-                    child: Text(
-                      "${lang.translate('screen.validateOTP.title')}",
-                      style: TextStyle(
-                        fontWeight: FontWeight.w600,
-                        fontSize: FontSize.s20,
-                      ),
-                    ),
-                  ),
-                  Align(
-                    alignment: Alignment.bottomLeft,
-                    child: Text(
-                      "${lang.translate('screen.validateOTP.subtitle')}",
-                      style: TextStyle(
-                        fontSize: FontSize.s14,
-                      ),
-                    ),
-                  ),
-                  SizedBox(
-                    height: Sizes.s30,
-                  ),
                   Image.asset(
                     "assets/images/misc/referal.png",
                     height: Sizes.s300,
@@ -98,7 +114,7 @@ class _ValidateOtpUIState extends State<ValidateOtpUI> {
                   SizedBox(
                     height: Sizes.s20,
                   ),
-                  PinCodeTextField(
+                  requestAttemptsCounter == 0 ? Container() : PinCodeTextField(
                     appContext: context,
                     length: 6,
                     controller: otpController,
@@ -135,8 +151,144 @@ class _ValidateOtpUIState extends State<ValidateOtpUI> {
                     onChanged: (String value){},
 
                   ),
+                  requestAttemptsCounter == 0 ? Align(
+                      alignment: Alignment.center,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          TextTitle(
+                            data: "${lang.translate('screen.validateOTP.maxAttemptsMessage')}",
+                            height: Sizes.s20,
+                            size: Sizes.s24,
+                            weight: FontWeight.bold,
+                          ),
+                          SizedBox(height: Sizes.s20),
+                          TextParagraph(
+                            data: "${lang.translate('screen.validateOTP.waitBeforeRefreshOtpMessage')}",
+                            fontStyle: FontStyle.normal,
+                            weight: FontWeight.w400,
+                            size: Sizes.s14,
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              TextParagraph(
+                                data: "${lang.translate('screen.validateOTP.waitBeforeRefreshOtpMessage2')}",
+                                fontStyle: FontStyle.normal,
+                                weight: FontWeight.w400,
+                                size: Sizes.s14,
+                              ),
+                              SlideCountdownClock(
+                                duration: waitTimeOtp,
+                                textStyle: TextStyle(
+                                    color: secondaryColor,
+                                    fontSize: Sizes.s14,
+                                    fontWeight: FontWeight.w500
+                                ),
+                                separator: ":",
+                                onDone: (){
+                                  setState(() {
+                                    sendRefreshCode = true;
+                                    hideButton = true;
+                                  });
+                                },
+                              ),
+                              TextParagraph(
+                                data: "${lang.translate('screen.validateOTP.closeBracket')}",
+                                fontStyle: FontStyle.normal,
+                                weight: FontWeight.w400,
+                                size: Sizes.s14,
+                              ),
+                            ],
+                          )
+                        ],
+                      )
+                  ) :
+                  sendRefreshCode ?
+                  Column(
+                    children: [
+                      Align(
+                        alignment: Alignment.center,
+                        child: Column(
+                          children: [
+                            TextParagraph(
+                              data: "${lang.translate('screen.validateOTP.invalidOtp')}",
+                              fontStyle: FontStyle.normal,
+                              weight: FontWeight.w400,
+                              size: Sizes.s16,
+                              color: Colors.red,
+                            ),
+                            TextParagraph(
+                              data: "${lang.translate('screen.validateOTP.invalidOtpMessage')}",
+                              fontStyle: FontStyle.normal,
+                              weight: FontWeight.w400,
+                              size: Sizes.s16,
+                            ),
+                            InkWell(
+                              onTap: () async{
+                                setState(() {
+                                  sendRefreshCode = false;
+                                  hideButton = false;
+                                });
+                                persistentBottomSheetController = _scaffoldKey.currentState.showBottomSheet((context) =>
+                                    Container(
+                                      child: CustomModal.loading(context, "${lang.translate('screen.register.progressMessage')}"),
+                                    )
+                                );
+                                final sharedPrefService = await SharedPreferencesService.instance;
+                                await Future.delayed(
+                                    Duration(milliseconds: 5000),
+                                ()  =>  UserController().run(
+                                    Routes.RESEND_OTP ,
+                                    {
+                                      "phone": sharedPrefService.phone,
+                                    }
+                                )).then((data) async {
+                                  print(data);
+                                  if(data['code'] == 1000){
+                                    setState(() {
+                                      sendRefreshCode = false;
+                                      hideButton = false;
+                                    });
+                                  }else {
+                                    await dialogShow(context, "Oops an error !!!", data['message']);
+                                  }
+                                }).catchError((onError) async{
+                                  print(onError);
+                                  await dialogShow(context, "Oops an error !!!", "${lang.translate('screen.register.errorMessage')}");
+                                }).whenComplete(() => {
+                                  persistentBottomSheetController.close(),
+                                  setState(()=>{
+                                    print('Data receive'),
+                                  })
+                                });
+                              },
+                              child: TextParagraph(
+                                data: "${lang.translate('screen.validateOTP.btnResendOtp')}",
+                                fontStyle: FontStyle.normal,
+                                weight: FontWeight.w400,
+                                size: Sizes.s16,
+                                color: secondaryColor,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ) : Align(
+                    alignment: Alignment.center,
+                    child: TextParagraph(
+                      data: "${lang.translate('screen.validateOTP.subtitle')}",
+                      fontStyle: FontStyle.normal,
+                      weight: FontWeight.w400,
+                      size: Sizes.s16,
+
+                    ),
+                  ),
                   SizedBox(
-                    height: Sizes.s15,
+                    height: Sizes.s30,
                   ),
                   Container(
                     height: Sizes.s40,
@@ -144,6 +296,9 @@ class _ValidateOtpUIState extends State<ValidateOtpUI> {
                     ButtonSystemTheme(
                       title: "${lang.translate('screen.validateOTP.otpButton')}",
                       onTap: () async {
+                        setState(() {
+                          requestAttemptsCounter = requestAttemptsCounter - 1;
+                        });
                         if(_formKey.currentState.validate()){
                           openRemovePage(context, ResetPasswordUI(code: otpController.text));
                         }
@@ -153,9 +308,12 @@ class _ValidateOtpUIState extends State<ValidateOtpUI> {
                       height: Sizes.s48,
                       width: MediaQuery.of(context).size.width,
                       color: secondaryColor,
-                    ): ButtonSystemTheme(
+                    ): hideButton || sendRefreshCode ? Container() : ButtonSystemTheme(
                       title: "${lang.translate('screen.validateOTP.otpButton')}",
                       onTap: () async {
+                        setState(() {
+                          requestAttemptsCounter = requestAttemptsCounter - 1;
+                        });
                         if(_formKey.currentState.validate()){
                           persistentBottomSheetController = _scaffoldKey.currentState.showBottomSheet((context) =>
                               Container(
@@ -172,24 +330,32 @@ class _ValidateOtpUIState extends State<ValidateOtpUI> {
                                   "code": otpController.text,
                                 }
                             ).then((data) async {
-                                  print(data);
-                                  if(data['code'] == 1000){
-                                    final sharedPrefService = await SharedPreferencesService.instance;
-                                    await sharedPrefService.setToken(data['token']);
-                                    openRemovePage(context, DashboardUI());
-                                  }else if(data['code'] == 1002){
-                                    await dialogShow(context, "Oops an error !!!", "${lang.translate('screen.register.errorPhoneValidation')}");
-                                  }else {
-                                    await dialogShow(context, "Oops an error !!!", data['message']);
-                                  }
-                                }).catchError((onError) async{
-                                  print(onError);
-                                  await dialogShow(context, "Oops an error !!!", "${lang.translate('screen.register.errorMessage')}");
-                                }).whenComplete(() => {
-                                  setState(()=>{
-                                    print('Data receive'),
-                                  })
-                                }),
+                                print(data);
+                                if(data['code'] == 1000){
+                                  final sharedPrefService = await SharedPreferencesService.instance;
+                                  await sharedPrefService.setToken(data['token']);
+                                  openRemovePage(context, DashboardUI());
+                                }else if(data['code'] == 1002){
+                                  setState(() {
+                                    hideButton = true;
+                                    sendRefreshCode = true;
+                                  });
+                                  await dialogShow(context, "Oops an error !!!", "${lang.translate('screen.register.errorPhoneValidation')}");
+                                }else {
+                                  setState(() {
+                                    hideButton = true;
+                                    sendRefreshCode = true;
+                                  });
+                                  await dialogShow(context, "Oops an error !!!", data['message']);
+                                }
+                              }).catchError((onError) async{
+                                print(onError);
+                                await dialogShow(context, "Oops an error !!!", "${lang.translate('screen.register.errorMessage')}");
+                              }).whenComplete(() => {
+                                setState(()=>{
+                                  print('Data receive'),
+                                })
+                              }),
                           ).whenComplete(() => {
                             persistentBottomSheetController.close(),
                             print("Future closed")
@@ -202,6 +368,78 @@ class _ValidateOtpUIState extends State<ValidateOtpUI> {
                       width: MediaQuery.of(context).size.width,
                       color: secondaryColor,
                     ),
+                  ),
+                  SizedBox(height: Sizes.s20),
+                  Align(
+                    alignment: Alignment.center,
+                    child: sendRefreshCode ? Container() : Row(
+                      children: [
+                        TextParagraph(
+                          data: "${lang.translate('screen.validateOTP.receiveCodeMessage')}",
+                          fontStyle: FontStyle.normal,
+                          weight: FontWeight.w400,
+                          size: Sizes.s14,
+                        ),
+                        SlideCountdownClock(
+                          duration: timeOutOtp,
+                          textStyle: TextStyle(
+                            color: secondaryColor,
+                            fontSize: Sizes.s14,
+                            fontWeight: FontWeight.w500
+                          ),
+                          separator: ":",
+                          onDone: (){
+                            setState(() {
+                              sendRefreshCode = true;
+                              hideButton = true;
+                            });
+                          },
+                        ),
+                        TextParagraph(
+                          data: "${lang.translate('screen.validateOTP.closeBracket')}",
+                          fontStyle: FontStyle.normal,
+                          weight: FontWeight.w400,
+                          size: Sizes.s14,
+                        ),
+                      ],
+                    )
+                  ),
+                  SizedBox(
+                    height: Sizes.s30,
+                  ),
+                  Align(
+                      alignment: Alignment.center,
+                      child: requestAttemptsCounter == 0 ? Row(
+                        children: [
+                          TextParagraph(
+                            data: "${lang.translate('screen.validateOTP.receiveCodeMessage')}",
+                            fontStyle: FontStyle.normal,
+                            weight: FontWeight.w400,
+                            size: Sizes.s14,
+                          ),
+                          SlideCountdownClock(
+                            duration: timeOutOtp,
+                            textStyle: TextStyle(
+                                color: secondaryColor,
+                                fontSize: Sizes.s14,
+                                fontWeight: FontWeight.w500
+                            ),
+                            separator: ":",
+                            onDone: (){
+                              setState(() {
+                                sendRefreshCode = true;
+                                hideButton = true;
+                              });
+                            },
+                          ),
+                          TextParagraph(
+                            data: "${lang.translate('screen.validateOTP.closeBracket')}",
+                            fontStyle: FontStyle.normal,
+                            weight: FontWeight.w400,
+                            size: Sizes.s14,
+                          ),
+                        ],
+                      ) :Container(),
                   ),
                 ],
               ),

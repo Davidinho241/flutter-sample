@@ -6,6 +6,7 @@ class Routes {
   static final String LOGIN_VERIFY_OTP = 'auth/login/verify/otp';
   static final String FORGOT_PASSWORD = '/auth/forgotPassword';
   static final String RESET_PASSWORD = '/auth/resetPassword';
+  static final String RESEND_OTP = '/auth/resendCode';
 
   String buildRoute(String route){
     return BASE_URL+route;

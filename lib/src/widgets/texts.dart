@@ -65,8 +65,9 @@ class TextParagraph extends StatelessWidget {
       child: Container(
         child: Text(
           data,
-          style: GoogleFonts.heebo(
+          style: TextStyle(
             color: color != null ? color : textParagraphColor,
+            fontFamily: 'SF-Pro',
             fontSize: size != null ? size : FontSize.s14,
             fontWeight: weight != null ? weight : FontWeight.w300,
             fontStyle: fontStyle != null ? fontStyle : FontStyle.normal,

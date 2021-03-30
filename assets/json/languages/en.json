@@ -33,15 +33,21 @@
         },
         "validateOTP": {
             "appBar": "Validate OTP",
-            "title": "Verify your account",
+            "receiveCodeMessage": "Didn't receive the code? Re-send (",
             "subtitle": "Please enter a 6-digit code we sent to your mobile ***50.",
-            "otpHint": "OTP Code",
-            "otpLabel": "OTP Code",
             "otpButton": "confirm Account",
-            "otpSuccess": "OTP verify Successfully",
+            "btnResendOtp": "Resend the code",
+            "invalidOtp": "Invalid code! ",
+            "invalidOtpMessage": "The code that you have entered is incorrect. ",
+            "waitBeforeRefreshOtpMessage": "Please wait a few moments before",
+            "waitBeforeRefreshOtpMessage2": " resending the code. ",
+            "maxAttemptsMessage": "Maximun number of attempts reached!",
+            "noAccountMessage": "Don't have an account?",
+            "btnCreateAccount": "Create account",
             "progressMessage": "Processing verification...",
             "emptyFieldMessage": "This field is required",
-            "invalidLengthFieldMessage": "The value could not be less or granted than 6 characters"
+            "invalidLengthFieldMessage": "The value could not be less or granted than 6 characters",
+            "closeBracket": ")"
         },
         "login": {
             "appBar": "Login",

@@ -39,6 +39,7 @@ dependencies:
   country_pickers: ^2.0.0
   typicons_flutter: ^0.4.2
   pin_code_fields: ^7.0.0
+  slide_countdown_clock: ^1.0.3
 
 flutter_icons:
   android: true
@@ -49,6 +50,8 @@ flutter_icons:
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.0
+  flutter_riverpod: any
+  timer_count_down: any
 
 dev_dependencies:
   flutter_test:
@@ -72,6 +75,28 @@ flutter:
     - assets/images/misc/
     - assets/json/data/
     - assets/json/languages/
+
+  fonts:
+    - family: SF-Pro
+      fonts:
+        - asset: fonts/SF-Pro/SF-Pro-Display-Black.otf
+        - asset: fonts/SF-Pro/SF-Pro-Display-BlackItalic.otf
+        - asset: fonts/SF-Pro/SF-Pro-Display-Bold.otf
+        - asset: fonts/SF-Pro/SF-Pro-Display-BoldItalic.otf
+        - asset: fonts/SF-Pro/SF-Pro-Display-Heavy.otf
+        - asset: fonts/SF-Pro/SF-Pro-Display-HeavyItalic.otf
+        - asset: fonts/SF-Pro/SF-Pro-Display-Light.otf
+        - asset: fonts/SF-Pro/SF-Pro-Display-LightItalic.otf
+        - asset: fonts/SF-Pro/SF-Pro-Display-Medium.otf
+        - asset: fonts/SF-Pro/SF-Pro-Display-MediumItalic.otf
+        - asset: fonts/SF-Pro/SF-Pro-Display-Regular.otf
+        - asset: fonts/SF-Pro/SF-Pro-Display-RegularItalic.otf
+        - asset: fonts/SF-Pro/SF-Pro-Display-Semibold.otf
+        - asset: fonts/SF-Pro/SF-Pro-Display-SemiboldItalic.otf
+        - asset: fonts/SF-Pro/SF-Pro-Display-Thin.otf
+        - asset: fonts/SF-Pro/SF-Pro-Display-ThinItalic.otf
+        - asset: fonts/SF-Pro/SF-Pro-Display-Ultralight.otf
+        - asset: fonts/SF-Pro/SF-Pro-Display-UltralightItalic.otf
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
