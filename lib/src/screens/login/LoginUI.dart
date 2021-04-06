@@ -46,7 +46,17 @@ class _LoginUIState extends State<LoginUI> {
   void initState() {
     super.initState();
     inputPhoneFocus = FocusNode();
+    inputPhoneFocus.addListener(() {
+      setState(() {
+        print("Has focus: ${inputPhoneFocus.hasFocus}");
+      });
+    });
     inputPasswordFocus = FocusNode();
+    inputPasswordFocus.addListener(() {
+      setState(() {
+        print("Has focus: ${inputPasswordFocus.hasFocus}");
+      });
+    });
   }
   @override
   void dispose() {
@@ -178,6 +188,7 @@ class _LoginUIState extends State<LoginUI> {
                         controller: phoneController,
                         maxLength: 9,
                         validator: _validatePhone,
+                        focusNode: inputPhoneFocus,
                       ),
                     )
                   ],
@@ -204,10 +215,11 @@ class _LoginUIState extends State<LoginUI> {
                   ),
                   prefixIcon: Icon(
                     FlutterIcons.lock_outline_mdi,
-                    color: inputHint,
+                    color: inputPasswordFocus.hasFocus ? secondaryColor : inputHint,
                   ),
                   controller: passwordController,
                   validator: _validatePassword,
+                  focusNode: inputPasswordFocus,
                 ),
                 SizedBox(
                   height: Sizes.s10,

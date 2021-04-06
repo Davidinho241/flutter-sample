@@ -52,7 +52,8 @@ class OutlineTextField extends StatelessWidget {
   final TextInputType textInputType;
   final bool enable;
   final int maxLength;
-  final bool autoFocus;
+  final Function onTap;
+  final FocusNode focusNode;
 
   OutlineTextField({
     this.hintText,
@@ -69,7 +70,8 @@ class OutlineTextField extends StatelessWidget {
     this.enable = true,
     this.validator,
     this.maxLength,
-    this.autoFocus = true
+    this.onTap,
+    this.focusNode
   });
   @override
   Widget build(BuildContext context) {
@@ -82,7 +84,7 @@ class OutlineTextField extends StatelessWidget {
         validator: validator,
         obscureText: obscureText,
         keyboardType: textInputType,
-        autofocus: autoFocus,
+        focusNode: focusNode,
         decoration: InputDecoration(
           prefix: prefix,
           suffixIcon: suffixIcon,
@@ -103,7 +105,7 @@ class OutlineTextField extends StatelessWidget {
           contentPadding: EdgeInsets.fromLTRB(Sizes.s30, Sizes.s30, Sizes.s30, 0),
           border: OutlineInputBorder(
             borderRadius: BorderRadius.all(Radius.circular(Sizes.s10)),
-            borderSide: !autoFocus ? BorderSide.none : BorderSide(width: Sizes.s1, color: secondaryColor, style: BorderStyle.solid),
+            borderSide: focusNode.hasFocus ? BorderSide(width: Sizes.s1, color: secondaryColor, style: BorderStyle.solid) : BorderSide.none,
           ),
           fillColor: inputBg,
           filled: enable,

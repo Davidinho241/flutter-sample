@@ -1,5 +1,5 @@
 import 'package:coinpay/src/components/slidersComponent.dart';
-import 'package:coinpay/src/screens/dashboard/DashboardUI.dart';
+import 'package:coinpay/src/helpers/localization.dart';
 import 'package:coinpay/src/screens/registration/RegisterUI.dart';
 import 'package:coinpay/src/services/local_service.dart';
 import 'package:coinpay/src/utils/colors.dart';
@@ -16,7 +16,6 @@ class SliderScreenUI extends StatefulWidget {
 
 class _SliderScreenUIState extends State<SliderScreenUI> {
   var _scaffoldKey = GlobalKey<ScaffoldState>();
-  bool _sliderLoaded = false;
   List<SliderComponent> _sliders = [];
   int currentSlider = 0;
   PageController pageController = new PageController(initialPage: 0);
@@ -25,7 +24,6 @@ class _SliderScreenUIState extends State<SliderScreenUI> {
     await LocalService.getSliders().then((value) {
       setState(() {
         _sliders = value;
-        _sliderLoaded = true;
       });
     });
   }
@@ -53,16 +51,16 @@ class _SliderScreenUIState extends State<SliderScreenUI> {
 
   @override
   Widget build(BuildContext context) {
+    var lang = AppLocalizations.of(context);
     return Scaffold(
       key: _scaffoldKey,
       appBar: AppBar(
         elevation: 0,
         actions: <Widget>[ if(currentSlider != _sliders.length -1)
-          FlatButton(
-            color: Colors.transparent,
+          TextButton(
             onPressed: () => pageController.animateToPage(_sliders.length -1, duration: Duration(microseconds: 400), curve: Curves.linear),
             child: TextParagraph(
-              data: "skip",
+              data: "${lang.translate('screen.register.btnSkip')}",
               color: secondaryColor,
               size: Sizes.s16,
               weight: FontWeight.w500,
@@ -86,7 +84,8 @@ class _SliderScreenUIState extends State<SliderScreenUI> {
           );
         },
       ),
-      bottomSheet: currentSlider != _sliders.length - 1 ? Wrap(
+      bottomSheet: Wrap(
+        alignment: WrapAlignment.end,
         children: [
           Container(
             color: Colors.white,
@@ -102,9 +101,10 @@ class _SliderScreenUIState extends State<SliderScreenUI> {
                     ],
                   ),
                   SizedBox(height: Sizes.s40),
+                  currentSlider != _sliders.length - 1 ?
                   GestureDetector(
                     child: ButtonWithIcon(
-                      title: "Next",
+                      title: "${lang.translate('screen.register.btnNext')}",
                       height: Sizes.s48,
                       icon: Icons.arrow_forward_ios,
                       color: secondaryColor,
@@ -112,30 +112,8 @@ class _SliderScreenUIState extends State<SliderScreenUI> {
                         pageController.animateToPage(currentSlider + 1, duration: Duration(microseconds: 400), curve: Curves.linear);
                       },
                     ),
-                  ),
-                ],
-              ),
-            ),
-          )
-        ],
-      ): Wrap(
-        children: [
-          Container(
-            color: Colors.white,
-            padding: EdgeInsets.only(left: Sizes.s12, top: Sizes.s30, right: Sizes.s12, bottom: Sizes.s30),
-            child: Center(
-              child: Column(
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      for(int i = 0; i < _sliders.length; i++) currentSlider == i ? pageIndexIndicator(true) : pageIndexIndicator(false),
-                    ],
-                  ),
-                  SizedBox(height: Sizes.s40),
-                  ButtonWithIcon(
-                    title: "Get Started",
+                  ) : ButtonWithIcon(
+                    title: "${lang.translate('screen.register.btnStart')}",
                     height: Sizes.s48,
                     icon: Icons.arrow_forward_ios,
                     color: secondaryColor,
@@ -149,11 +127,12 @@ class _SliderScreenUIState extends State<SliderScreenUI> {
             ),
           )
         ],
-      ),
+      )
     );
   }
 }
 
+// ignore: must_be_immutable
 class SliderTile extends StatelessWidget{
   String imagePath, title, description;
 
@@ -161,34 +140,34 @@ class SliderTile extends StatelessWidget{
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: MediaQuery.of(context).size.width,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-          Image.asset(
+    return Wrap(
+      children: [
+        Align(
+          alignment: Alignment.bottomCenter,
+          child: Image.asset(
             imagePath,
-            height: MediaQuery.of(context).size.height/2.5,
+            alignment: Alignment.center,
+            height: MediaQuery.of(context).size.height/3.1,
           ),
-          SizedBox(height: Sizes.s20),
-          Container(
-            padding: EdgeInsets.only(left: Sizes.s24, right: Sizes.s24),
-            child: Column(
-              children: [
-                Container(
-                  child: TextTitle(data : title),
-                ),
-                SizedBox(height: Sizes.s20),
-                Container(
-                  padding: EdgeInsetsDirectional.only(start: Sizes.s20, end: Sizes.s20),
-                  child: TextParagraph(data : description),
-                ),
-              ],
-            ),
+        ),
+        SizedBox(height: Sizes.s10),
+        Container(
+          padding: EdgeInsets.only(left: Sizes.s24, right: Sizes.s24),
+          child: Column(
+            children: [
+              Container(
+                child: TextTitle(data : title),
+              ),
+              SizedBox(height: Sizes.s8),
+              Container(
+                padding: EdgeInsetsDirectional.only(start: Sizes.s20, end: Sizes.s20),
+                child: TextParagraph(data : description),
+              ),
+            ],
           ),
-          SizedBox(height: Sizes.s5)
-        ],
-      ),
+        ),
+        SizedBox(height: Sizes.s5)
+      ],
     );
   }
 }

@@ -80,9 +80,9 @@ LinearGradient splashGradient() {
     begin: Alignment.topLeft,
     end: Alignment.bottomRight,
     colors: [
-      Color(0xff5452f6),
-      Color(0xff5452f6),
-      Color(0xff5452f6),
+      Color(0xff1C409C),
+      Color(0xff1C409C),
+      Color(0xff1C409C),
     ],
   );
 }

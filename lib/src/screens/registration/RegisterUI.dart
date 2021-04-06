@@ -52,9 +52,29 @@ class _RegisterUIState extends State<RegisterUI> {
   void initState() {
     super.initState();
     inputFirstNameFocus = FocusNode();
+    inputFirstNameFocus.addListener(() {
+      setState(() {
+        print("Has focus: ${inputFirstNameFocus.hasFocus}");
+      });
+    });
     inputLastNameFocus = FocusNode();
+    inputLastNameFocus.addListener(() {
+      setState(() {
+        print("Has focus: ${inputLastNameFocus.hasFocus}");
+      });
+    });
     inputPhoneFocus = FocusNode();
+    inputPhoneFocus.addListener(() {
+      setState(() {
+        print("Has focus: ${inputPhoneFocus.hasFocus}");
+      });
+    });
     inputPasswordFocus = FocusNode();
+    inputPasswordFocus.addListener(() {
+      setState(() {
+        print("Has focus: ${inputPasswordFocus.hasFocus}");
+      });
+    });
   }
   @override
   void dispose() {
@@ -136,11 +156,8 @@ class _RegisterUIState extends State<RegisterUI> {
 
     return Scaffold(
       key: _scaffoldKey,
-      appBar: AppBar(
-        elevation: 0,
-      ),
       body: Container(
-        margin: EdgeInsets.fromLTRB(Sizes.s15, Sizes.s15, Sizes.s15, 0),
+        margin: EdgeInsets.fromLTRB(Sizes.s15, Sizes.s40, Sizes.s15, 0),
         width: double.maxFinite,
         height: double.maxFinite,
         child: SingleChildScrollView(
@@ -149,12 +166,15 @@ class _RegisterUIState extends State<RegisterUI> {
             key: _formKey,
             child: Column(
               children: <Widget>[
+                SizedBox(height: Sizes.s8),
                 Align(
                   alignment: Alignment.bottomLeft,
                   child: TextTitle(
                     data: "${lang.translate('screen.register.title')}",
                     weight: FontWeight.w700,
                     size: Sizes.s31m25,
+                    textAlign: TextAlign.left,
+                    height: Sizes.s1,
                   ),
                 ),
                 Align(
@@ -163,10 +183,11 @@ class _RegisterUIState extends State<RegisterUI> {
                     data: "${lang.translate('screen.register.subtitle')}",
                     size: Sizes.s16,
                     weight: FontWeight.w300,
+                    textAlign: TextAlign.left,
                   ),
                 ),
                 SizedBox(
-                  height: Sizes.s25,
+                  height: Sizes.s40,
                 ),
                 OutlineTextField(
                   hintText:
@@ -179,10 +200,11 @@ class _RegisterUIState extends State<RegisterUI> {
                   textInputType: TextInputType.text,
                   prefixIcon: Icon(
                     Typicons.user_outline,
-                    color: inputHint,
+                    color: inputFirstNameFocus.hasFocus ? secondaryColor : inputHint,
                   ),
                   maxLength: 20,
                   validator: _validateField,
+                  focusNode: inputFirstNameFocus,
                 ),
                 SizedBox(
                   height: Sizes.s15,
@@ -198,10 +220,11 @@ class _RegisterUIState extends State<RegisterUI> {
                   textInputType: TextInputType.text,
                   prefixIcon: Icon(
                     Typicons.user_add_outline,
-                    color: inputHint,
+                    color: inputLastNameFocus.hasFocus ? secondaryColor : inputHint,
                   ),
                   maxLength: 20,
                   validator: _validateField,
+                  focusNode: inputLastNameFocus,
                 ),
                 SizedBox(
                   height: Sizes.s15,
@@ -228,6 +251,7 @@ class _RegisterUIState extends State<RegisterUI> {
                         controller: phoneController,
                         maxLength: 9,
                         validator: _validatePhone,
+                        focusNode: inputPhoneFocus,
                       ),
                     )
                   ],
@@ -265,68 +289,71 @@ class _RegisterUIState extends State<RegisterUI> {
                   ),
                   prefixIcon: Icon(
                     FlutterIcons.lock_outline_mdi,
-                    color: inputHint,
+                    color: inputPasswordFocus.hasFocus ? secondaryColor : inputHint,
                   ),
                   controller: passwordController,
                   validator: _validatePassword,
+                  focusNode: inputPasswordFocus,
                 ),
                 SizedBox(
                   height: Sizes.s20,
                 ),
-                Align(
-                  alignment: Alignment.bottomLeft,
-                  child: Container(
-                    width: double.maxFinite,
-                    child: Row(
-                      children: [
-                        Checkbox(
-                          materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                          activeColor: secondaryColor,
-                          checkColor: secondaryColor,
-                          value: isValidateTermsAndPolicy,
-                          onChanged: (value) => {
-                            print(value)
-                          }
-                        ),
-                        TextParagraph(
-                          data: "${lang.translate('screen.register.agreeAlt')}",
-                          size: Sizes.s9,
+                Container(
+                  width: double.infinity,
+                  child:
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      IconButton(
+                        onPressed: (){
+                          setState((){
+                            isValidateTermsAndPolicy = !isValidateTermsAndPolicy;
+                          });
+                        },
+                        icon: Icon(
+                          isValidateTermsAndPolicy ? FlutterIcons.check_box_outline_mco : FlutterIcons.check_box_outline_blank_mdi,
+                          color: isValidateTermsAndPolicy ? secondaryColor : inputHint
+                        )
+                      ),
+                      TextParagraph(
+                        data: "${lang.translate('screen.register.agreeAlt')}",
+                        size: Sizes.s11,
+                        weight: FontWeight.w400,
+                      ),
+                      InkWell(
+                        onTap: () =>{
+                          print("Terms of services")
+                        },
+                        child: TextParagraph(
+                          data: "${lang.translate('screen.register.termsOfServicesAlt')}",
+                          size: Sizes.s11,
                           weight: FontWeight.w400,
+                          color: secondaryColor,
                         ),
-                        InkWell(
-                          onTap: () =>{
-                            print("Terms of services")
-                          },
-                          child: TextParagraph(
-                            data: "${lang.translate('screen.register.termsOfServicesAlt')}",
-                            size: Sizes.s9,
-                            weight: FontWeight.w400,
-                            color: secondaryColor,
-                          ),
-                        ),
-                        TextParagraph(
-                          data: "${lang.translate('screen.register.andAlt')}",
-                          size: Sizes.s9,
+                      ),
+                      TextParagraph(
+                        data: "${lang.translate('screen.register.andAlt')}",
+                        size: Sizes.s11,
+                        weight: FontWeight.w400,
+                      ),
+                      InkWell(
+                        onTap: () => {
+                          print("Privacy Policy")
+                        },
+                        child: TextParagraph(
+                          data: "${lang.translate('screen.register.privacyPolicyAlt')}",
+                          size: Sizes.s11,
                           weight: FontWeight.w400,
+                          color: secondaryColor,
                         ),
-                        InkWell(
-                          onTap: () => {
-                            print("Privacy Policy")
-                          },
-                          child: TextParagraph(
-                            data: "${lang.translate('screen.register.privacyPolicyAlt')}",
-                            size: Sizes.s9,
-                            weight: FontWeight.w400,
-                            color: secondaryColor,
-                          ),
-                        ),
-                        TextParagraph(
-                          data: "${lang.translate('screen.register.foulStop')}",
-                          size: Sizes.s9,
-                          weight: FontWeight.w400,
-                        ),
-                      ],
-                    ),
+                      ),
+                      TextParagraph(
+                        data: "${lang.translate('screen.register.foulStop')}",
+                        size: Sizes.s11,
+                        weight: FontWeight.w400,
+                      ),
+                    ],
                   ),
                 ),
                 SizedBox(

@@ -17,7 +17,9 @@ class Sizes {
   static double s8 = 8.0;
   static double s9 = 9.0;
   static double s10 = 10.0;
+  static double s11 = 11.0;
   static double s12 = 12.0;
+  static double s13 = 13.0;
   static double s14 = 14.0;
   static double s15 = 15.0;
   static double s16 = 16.0;

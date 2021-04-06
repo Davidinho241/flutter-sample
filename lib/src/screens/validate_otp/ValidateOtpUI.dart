@@ -107,7 +107,7 @@ class _ValidateOtpUIState extends State<ValidateOtpUI> {
                     height: Sizes.s70,
                   ),
                   Image.asset(
-                    "assets/images/misc/referal.png",
+                    "assets/images/misc/validate_otp_illustrations.png",
                     height: Sizes.s300,
                     width: Sizes.s500,
                   ),

@@ -29,7 +29,10 @@
             "invalidLengthFieldMessage": "The value could not be less than 3 characters",
             "invalidLengthPasswordMessage": "The value could not be less than 8 characters",
             "invalidLengthPhoneMessage": "The value could not be less than 9 characters",
-            "errorPhoneValidation": "Your phone number is already use, please try another one."
+            "errorPhoneValidation": "Your phone number is already use, please try another one.",
+            "btnSkip": "Skip",
+            "btnStart": "Get Started",
+            "btnNext": "Next"
         },
         "validateOTP": {
             "appBar": "Validate OTP",

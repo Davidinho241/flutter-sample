@@ -11,13 +11,15 @@ class TextTitle extends StatelessWidget {
   final double height;
   final double size;
   final FontWeight weight;
+  final TextAlign textAlign;
 
   TextTitle({
     @required this.data,
     this.color,
     this.height,
     this.size,
-    this.weight
+    this.weight,
+    this.textAlign
   });
 
   @override
@@ -32,8 +34,9 @@ class TextTitle extends StatelessWidget {
             fontWeight: weight != null ? weight : FontWeight.bold,
             fontStyle: FontStyle.normal,
             letterSpacing: Sizes.s1,
+            height: height != null ? height : 1.6
           ),
-          textAlign: TextAlign.center,
+          textAlign: textAlign != null ? textAlign :TextAlign.center,
         ),
       ),
     );
@@ -49,6 +52,7 @@ class TextParagraph extends StatelessWidget {
   final double size;
   final FontWeight weight;
   final FontStyle fontStyle;
+  final TextAlign textAlign;
 
   TextParagraph({
     @required this.data,
@@ -56,7 +60,8 @@ class TextParagraph extends StatelessWidget {
     this.height,
     this.size,
     this.weight,
-    this.fontStyle
+    this.fontStyle,
+    this.textAlign
   });
 
   @override
@@ -72,8 +77,9 @@ class TextParagraph extends StatelessWidget {
             fontWeight: weight != null ? weight : FontWeight.w300,
             fontStyle: fontStyle != null ? fontStyle : FontStyle.normal,
             letterSpacing: Sizes.s1,
+            height: height != null ? height : 1.6
           ),
-          textAlign: TextAlign.center,
+          textAlign: textAlign != null ? textAlign :TextAlign.center,
         ),
       ),
     );

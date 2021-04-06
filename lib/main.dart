@@ -39,7 +39,7 @@ class App extends StatelessWidget {
                 themeMode: themeState.themeMode,
                 theme: buildThemeLight(context),
                 home: SplashscreenUI(),
-                debugShowCheckedModeBanner : false,
+                debugShowCheckedModeBanner : true,
               );
             });
       },
