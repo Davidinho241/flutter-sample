@@ -15,7 +15,9 @@
             "selectPhoneText": "Select your phone code",
             "registerButton": "Create Account",
             "accountAlt": "Already have an account? ",
-            "passwordAlt": "Your password must be at least 8 characters long ",
+            "passwordAlt": "Your password must be at least ",
+            "passwordAlt8Characters": "8 characters ",
+            "passwordAltEnd": "long",
             "termsOfServicesAlt": "Terms of service ",
             "privacyPolicyAlt": "privacy policy ",
             "agreeAlt": "I agree to the ",
@@ -160,6 +162,14 @@
             "phoneLabel": "Phone Number",
             "saveButton": "Save"
         },
+        "forgetPassword": {
+            "title": "Forgot your password?",
+            "subTitle": "Enter the phone number associated with your account and we'll send a verification code.",
+            "rememberPassword": "Have you remember your password? ",
+            "loginButton": "Log in",
+            "submitButton": "send code",
+            "errorPhoneValidation": "This phone number does not exist in the system."
+        },
         "changePassword": {
             "appBar": "Change Password",
             "oldPasswordHint": "Old Password",
@@ -227,15 +237,14 @@
             "button": "Submit Review"
         },
         "resetPassword": {
-            "appBar": "Reset Password",
-            "resetTitle": "Forgot Your Password?",
-            "resetSubtitle": "Enter your registered email below to receive password reset instruction.",
-            "emailHint": "Email ID",
-            "emailLabel": "Email ID",
+            "resetTitle": "Reset your password",
+            "resetSubtitle": "Your new password must be different from previously used password.",
+            "newPasswordHint": "New password",
+            "confirmNewPasswordHint": "Confirm password",
             "resetButton": "Send",
-            "successTitle": "Email has been sent!",
+            "invalidConfirmPassword": "The password most match",
             "successSubtitle": "Please check your inbox mail and follow the instruction to reset your password.",
-            "successButton": "Back to Login"
+            "submitButton": "Reset Password"
         },
         "paymentSuccess": {
             "body": "Payment Successful",
@@ -253,54 +262,6 @@
             "writeMsg": "Write a message here",
             "emptyMsg": "Message is empty",
             "openBtn": "Open"
-        },
-        "hotelPayment": {
-            "appBar": "Payment",
-            "details": "Details",
-            "personalInfo": "Personal Information",
-            "paymentInfo": "Payment Information",
-            "checkIn": "Check In",
-            "checkOut": "Check Out",
-            "rooms": "Rooms",
-            "guests": "Guests",
-            "taxFees": "Tax & Fees",
-            "nights": "nights",
-            "fee1": "Whatever Fee",
-            "fee2": "Another Fee",
-            "tax": "Tax",
-            "total": "Total",
-            "goToPersonalInfo": "Go to Personal Information",
-            "firstNameHint": "First Name",
-            "firstNameLabel": "First Name",
-            "lastNameHint": "Last Name",
-            "lastNameLabel": "Last Name",
-            "emailHint": "Email Address",
-            "emailLabel": "Email Address",
-            "addressHint": "Address",
-            "addressLabel": "Address",
-            "postalHint": "Postal Code",
-            "postalLabel": "Postal Code",
-            "phoneHint": "Phone Number",
-            "phoneLabel": "Phone Number",
-            "goToPayment": "Go to Payment",
-            "goToConfirmation": "Go to Confirmation",
-            "guestName": "Guest Name",
-            "email": "Email",
-            "phone": "Phone",
-            "address": "Address",
-            "postalCode": "Postal Code",
-            "cardHolder": "Card Holder",
-            "cardNumber": "Card Number",
-            "expiredDate": "Expired Date",
-            "totalPayment": "Total Payment",
-            "totalPaymentInfo": "This is the total amount of your reservation.",
-            "okBtn": "Okay",
-            "confirm": "Confirm"
-        },
-        "promoDetail": {
-            "appBar": "Promo Information",
-            "postedAt": "Posted at",
-            "expiredAt": "Expired at"
         }
     },
     "widget": {

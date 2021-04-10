@@ -25,18 +25,17 @@ class ResetPasswordUI extends StatefulWidget {
 
   // receive data from the FirstScreen as a parameter
   ResetPasswordUI({Key key, @required this.code}) : super(key: key);
-  
+
   @override
   _ResetPasswordUIState createState() => _ResetPasswordUIState(this.code);
 }
 
 class _ResetPasswordUIState extends State<ResetPasswordUI> {
-  
-  final String code;
 
+  final String code;
   // receive data from the FirstScreen as a parameter
   _ResetPasswordUIState(this.code);
-  
+
   final confirmPasswordController = TextEditingController();
   final passwordController = TextEditingController();
   FocusNode confirmPasswordFocus;
@@ -48,8 +47,6 @@ class _ResetPasswordUIState extends State<ResetPasswordUI> {
   bool enable = true;
 
   bool _obscurePassword = true;
-  Country _selectedFilteredDialogCountry =
-  CountryPickerUtils.getCountryByPhoneCode('237');
 
   final _formKey = GlobalKey<FormState>();
 
@@ -57,7 +54,17 @@ class _ResetPasswordUIState extends State<ResetPasswordUI> {
   void initState() {
     super.initState();
     confirmPasswordFocus = FocusNode();
+    confirmPasswordFocus.addListener(() {
+      setState(() {
+        print("Has focus: ${confirmPasswordFocus.hasFocus}");
+      });
+    });
     inputPasswordFocus = FocusNode();
+    inputPasswordFocus.addListener(() {
+      setState(() {
+        print("Has focus: ${inputPasswordFocus.hasFocus}");
+      });
+    });
   }
   @override
   void dispose() {
@@ -73,18 +80,10 @@ class _ResetPasswordUIState extends State<ResetPasswordUI> {
   Widget build(BuildContext context) {
     var lang = AppLocalizations.of(context);
 
-    String _validateField(String value) {
-      if (isRequired(value)) return "${lang.translate('screen.register.emptyFieldMessage')}";
-
-      if (value.length < 3) return "${lang.translate('screen.register.invalidLengthFieldMessage')}";
-
-      return null;
-    }
-
     String _validateConfirmPassword(String value) {
       if (isRequired(value)) return "${lang.translate('screen.register.emptyFieldMessage')}" ;
 
-      if (value != passwordController.text) return "${lang.translate('screen.register.invalidLengthPhoneMessage')}";
+      if (value != passwordController.text) return "${lang.translate('screen.resetPassword.invalidConfirmPassword')}";
 
       return null;
     }
@@ -115,17 +114,20 @@ class _ResetPasswordUIState extends State<ResetPasswordUI> {
                 Align(
                   alignment: Alignment.bottomLeft,
                   child: TextTitle(
-                    data: "${lang.translate('screen.login.title')}",
+                    data: "${lang.translate('screen.resetPassword.resetTitle')}",
                     weight: FontWeight.w700,
                     size: Sizes.s31m25,
+                    textAlign: TextAlign.left,
+                    height: Sizes.s1,
                   ),
                 ),
                 Align(
                   alignment: Alignment.bottomLeft,
                   child: TextParagraph(
-                    data: "${lang.translate('screen.login.subtitle')}",
+                    data: "${lang.translate('screen.resetPassword.resetSubtitle')}",
                     size: Sizes.s16,
                     weight: FontWeight.w300,
+                    textAlign: TextAlign.left,
                   ),
                 ),
                 SizedBox(
@@ -133,8 +135,8 @@ class _ResetPasswordUIState extends State<ResetPasswordUI> {
                 ),
                 OutlineTextField(
                   obscureText: _obscurePassword,
-                  hintText: "${lang.translate('screen.register.passwordHint')}",
-                  labelText: "${lang.translate('screen.register.passwordLabel')}",
+                  hintText: "${lang.translate('screen.resetPassword.newPasswordHint')}",
+                  labelText: "${lang.translate('screen.resetPassword.newPasswordHint')}",
                   hintStyle: TextStyle(fontSize: FontSize.s14),
                   labelStyle: TextStyle(fontSize: FontSize.s14),
                   textInputType: TextInputType.visiblePassword,
@@ -148,20 +150,24 @@ class _ResetPasswordUIState extends State<ResetPasswordUI> {
                       });
                     },
                   ),
-                  prefixIcon: Icon(
-                    FlutterIcons.lock_outline_mdi,
-                    color: inputHint,
+                  prefixIcon: IconButton(
+                      iconSize: Sizes.s24,
+                      icon: Icon(
+                        FlutterIcons.lock_outline_mdi,
+                        color: inputPasswordFocus.hasFocus ? secondaryColor : inputHint,
+                      )
                   ),
                   controller: passwordController,
                   validator: _validatePassword,
+                  focusNode: inputPasswordFocus,
                 ),
                 SizedBox(
                   height: Sizes.s15,
                 ),
                 OutlineTextField(
                   obscureText: _obscurePassword,
-                  hintText: "${lang.translate('screen.register.passwordHint')}",
-                  labelText: "${lang.translate('screen.register.passwordLabel')}",
+                  hintText: "${lang.translate('screen.resetPassword.confirmNewPasswordHint')}",
+                  labelText: "${lang.translate('screen.resetPassword.confirmNewPasswordHint')}",
                   hintStyle: TextStyle(fontSize: FontSize.s14),
                   labelStyle: TextStyle(fontSize: FontSize.s14),
                   textInputType: TextInputType.visiblePassword,
@@ -175,12 +181,16 @@ class _ResetPasswordUIState extends State<ResetPasswordUI> {
                       });
                     },
                   ),
-                  prefixIcon: Icon(
-                    FlutterIcons.lock_outline_mdi,
-                    color: inputHint,
+                  prefixIcon: IconButton(
+                      iconSize: Sizes.s24,
+                      icon: Icon(
+                        FlutterIcons.lock_outline_mdi,
+                        color: confirmPasswordFocus.hasFocus ? secondaryColor : inputHint,
+                      )
                   ),
                   controller: confirmPasswordController,
                   validator: _validateConfirmPassword,
+                  focusNode: confirmPasswordFocus,
                 ),
                 SizedBox(
                   height: Sizes.s20,
@@ -188,7 +198,7 @@ class _ResetPasswordUIState extends State<ResetPasswordUI> {
                 Container(
                   height: Sizes.s40,
                   child: ButtonSystemTheme(
-                    title: "${lang.translate('screen.login.loginButton')}",
+                    title: "${lang.translate('screen.resetPassword.submitButton')}",
                     onTap: () async {
                       persistentBottomSheetController = _scaffoldKey.currentState.showBottomSheet((context) =>
                           Container(
@@ -212,8 +222,6 @@ class _ResetPasswordUIState extends State<ResetPasswordUI> {
                             final sharedPrefService = await SharedPreferencesService.instance;
                             await sharedPrefService.setToken(data['token']);
                             openRemovePage(context, DashboardUI());
-                          }else if(data['code'] == 1002){
-                            await dialogShow(context, "Oops an error !!!", "${lang.translate('screen.register.errorPhoneValidation')}");
                           }else {
                             await dialogShow(context, "Oops an error !!!", data['message']);
                           }
@@ -221,10 +229,10 @@ class _ResetPasswordUIState extends State<ResetPasswordUI> {
                           print(onError);
                           await dialogShow(context, "Oops an error !!!", "${lang.translate('screen.register.errorMessage')}");
                         }).whenComplete(() => {
-                              setState(()=>{
-                                print('Data receive'),
-                              })
-                            }),
+                          setState(()=>{
+                            print('Data receive'),
+                          })
+                        }),
                       ).whenComplete(() => {
                         persistentBottomSheetController.close(),
                         print("Future closed")
@@ -239,24 +247,6 @@ class _ResetPasswordUIState extends State<ResetPasswordUI> {
                 ),
                 SizedBox(
                   height: Sizes.s30,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    TextParagraph(data: "${lang.translate('screen.login.noAccountAlt')}"),
-                    Material(
-                      color: Colors.transparent,
-                      child: InkWell(
-                        onTap: () => openRemovePage(context, RegisterUI()),
-                        child: TextParagraph(
-                          data: "${lang.translate('screen.login.registerButton')}",
-                          color: secondaryColor,
-                          weight: FontWeight.w400,
-                          size: Sizes.s14,
-                        ),
-                      ),
-                    )
-                  ],
                 )
               ],
             ),

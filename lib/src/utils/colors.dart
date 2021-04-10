@@ -8,3 +8,4 @@ final Color thirdColor = Color(0xff454cd6);
 final Color fourthColor = Color(0x1a454cd6);
 final Color inputBg = Color(0xd031b3a);
 final Color inputHint = Color(0xffc3c7d0);
+final Color defaultTextColor = Color(0xe6031b3a);

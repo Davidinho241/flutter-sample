@@ -43,6 +43,7 @@ class Sizes {
   static double s90 = 90.0;
   static double s95 = 95.0;
   static double s100 = 100.0;
+  static double s105 = 105.0;
   static double s110 = 110.0;
   static double s120 = 120.0;
   static double s123 = 123.0;

@@ -19,6 +19,7 @@ import 'package:country_pickers/country.dart';
 import 'package:country_pickers/country_picker_dialog.dart';
 import 'package:country_pickers/utils/utils.dart';
 import 'package:coinpay/src/helpers/validation.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class LoginUI extends StatefulWidget {
   @override
@@ -73,10 +74,24 @@ class _LoginUIState extends State<LoginUI> {
         children: <Widget>[
           CountryPickerUtils.getDefaultFlagImage(country),
           SizedBox(width: 2.0),
-          Icon(Icons.keyboard_arrow_down),
+          Icon(Icons.keyboard_arrow_down,
+            color: inputPhoneFocus.hasFocus ? secondaryColor : defaultTextColor,
+          ),
+          SizedBox(width: 2.0),
+          Image.asset(
+            "assets/images/icons/line.png",
+            height: Sizes.s25,
+          ),
+          SizedBox(width: 4.0),
+          Text("+${country.phoneCode}",
+            style:  GoogleFonts.heebo(
+                color: inputPhoneFocus.hasFocus ? secondaryColor : defaultTextColor,
+                fontWeight: FontWeight.w500,
+                fontSize: FontSize.s14,
+                fontStyle: FontStyle.normal
+            ),
+          ),
           SizedBox(width: 5.0),
-          Text("+${country.phoneCode}"),
-          SizedBox(width: 8.0),
           showCountryName ? Flexible(child: Text(country.name)) : Container()
         ],
       );
@@ -153,6 +168,8 @@ class _LoginUIState extends State<LoginUI> {
                     data: "${lang.translate('screen.login.title')}",
                     weight: FontWeight.w700,
                     size: Sizes.s31m25,
+                    textAlign: TextAlign.left,
+                    height: Sizes.s1,
                   ),
                 ),
                 Align(
@@ -161,37 +178,36 @@ class _LoginUIState extends State<LoginUI> {
                     data: "${lang.translate('screen.login.subtitle')}",
                     size: Sizes.s16,
                     weight: FontWeight.w300,
+                    textAlign: TextAlign.left,
                   ),
                 ),
                 SizedBox(
-                  height: Sizes.s25,
+                  height: Sizes.s50,
                 ),
-                Row(
-                  children: <Widget>[
-                    InkWell(
+                OutlineTextField(
+                  prefixIcon: Container(
+                    alignment: Alignment.center,
+                    padding: EdgeInsets.only(left: Sizes.s10),
+                    width: Sizes.s105,
+                    child: InkWell(
                       onTap: _openFilteredCountryPickerDialog,
                       child: _buildDialogItem(
                         _selectedFilteredDialogCountry,
                         showCountryName: false,
                       ),
                     ),
-                    Expanded(
-                      flex: 1,
-                      child: OutlineTextField(
-                        hintText:
-                        "${lang.translate('screen.register.phoneHint')}",
-                        labelText:
-                        "${lang.translate('screen.register.phoneLabel')}",
-                        hintStyle: TextStyle(fontSize: FontSize.s14),
-                        labelStyle: TextStyle(fontSize: FontSize.s14),
-                        textInputType: TextInputType.phone,
-                        controller: phoneController,
-                        maxLength: 9,
-                        validator: _validatePhone,
-                        focusNode: inputPhoneFocus,
-                      ),
-                    )
-                  ],
+                  ),
+                  hintText:
+                  "${lang.translate('screen.register.phoneHint')}",
+                  labelText:
+                  "${lang.translate('screen.register.phoneLabel')}",
+                  hintStyle: TextStyle(fontSize: FontSize.s14),
+                  labelStyle: TextStyle(fontSize: FontSize.s14),
+                  textInputType: TextInputType.phone,
+                  controller: phoneController,
+                  maxLength: 15,
+                  validator: _validatePhone,
+                  focusNode: inputPhoneFocus,
                 ),
                 SizedBox(
                   height: Sizes.s15,
@@ -213,9 +229,12 @@ class _LoginUIState extends State<LoginUI> {
                       });
                     },
                   ),
-                  prefixIcon: Icon(
-                    FlutterIcons.lock_outline_mdi,
-                    color: inputPasswordFocus.hasFocus ? secondaryColor : inputHint,
+                  prefixIcon: IconButton(
+                      iconSize: Sizes.s24,
+                      icon: Icon(
+                        FlutterIcons.lock_outline_mdi,
+                        color: inputPasswordFocus.hasFocus ? secondaryColor : inputHint,
+                      )
                   ),
                   controller: passwordController,
                   validator: _validatePassword,

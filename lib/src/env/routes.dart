@@ -11,4 +11,12 @@ class Routes {
   String buildRoute(String route){
     return BASE_URL+route;
   }
+
+  static String getPrivacyPolicyUrl(){
+    return "https://coinpay-alpha.herokuapp.com/privacy";
+  }
+
+  static String getTermsOfServicesUrl(){
+    return "https://coinpay-alpha.herokuapp.com/terms";
+  }
 }

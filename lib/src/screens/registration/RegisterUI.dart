@@ -18,6 +18,7 @@ import 'package:coinpay/src/widgets/buttons.dart';
 import 'package:coinpay/src/widgets/inputs.dart';
 import 'package:coinpay/src/controllers/UserController.dart';
 import 'package:coinpay/src/env/routes.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:typicons_flutter/typicons_flutter.dart';
 import 'package:coinpay/src/helpers/dialog.dart';
 
@@ -95,10 +96,24 @@ class _RegisterUIState extends State<RegisterUI> {
         children: <Widget>[
           CountryPickerUtils.getDefaultFlagImage(country),
           SizedBox(width: 2.0),
-          Icon(Icons.keyboard_arrow_down),
+          Icon(Icons.keyboard_arrow_down,
+            color: inputPhoneFocus.hasFocus ? secondaryColor : defaultTextColor,
+          ),
+          SizedBox(width: 2.0),
+          Image.asset(
+            "assets/images/icons/line.png",
+            height: Sizes.s25,
+          ),
+          SizedBox(width: 4.0),
+          Text("+${country.phoneCode}",
+            style:  GoogleFonts.heebo(
+                color: inputPhoneFocus.hasFocus ? secondaryColor : defaultTextColor,
+                fontWeight: FontWeight.w500,
+                fontSize: FontSize.s14,
+                fontStyle: FontStyle.normal
+            ),
+          ),
           SizedBox(width: 5.0),
-          Text("+${country.phoneCode}"),
-          SizedBox(width: 8.0),
           showCountryName ? Flexible(child: Text(country.name)) : Container()
         ],
       );
@@ -198,9 +213,12 @@ class _RegisterUIState extends State<RegisterUI> {
                   labelStyle: TextStyle(fontSize: FontSize.s14),
                   controller: firstNameController,
                   textInputType: TextInputType.text,
-                  prefixIcon: Icon(
-                    Typicons.user_outline,
-                    color: inputFirstNameFocus.hasFocus ? secondaryColor : inputHint,
+                  prefixIcon: IconButton(
+                    iconSize: Sizes.s24,
+                    icon: Icon(
+                      Typicons.user_outline,
+                      color: inputFirstNameFocus.hasFocus ? secondaryColor : inputHint,
+                    )
                   ),
                   maxLength: 20,
                   validator: _validateField,
@@ -218,9 +236,12 @@ class _RegisterUIState extends State<RegisterUI> {
                   labelStyle: TextStyle(fontSize: FontSize.s14),
                   controller: lastNameController,
                   textInputType: TextInputType.text,
-                  prefixIcon: Icon(
-                    Typicons.user_add_outline,
-                    color: inputLastNameFocus.hasFocus ? secondaryColor : inputHint,
+                  prefixIcon: IconButton(
+                    iconSize: Sizes.s24,
+                    icon: Icon(
+                      Typicons.user_add_outline,
+                      color: inputLastNameFocus.hasFocus ? secondaryColor : inputHint,
+                    ),
                   ),
                   maxLength: 20,
                   validator: _validateField,
@@ -229,43 +250,56 @@ class _RegisterUIState extends State<RegisterUI> {
                 SizedBox(
                   height: Sizes.s15,
                 ),
-                Row(
-                  children: <Widget>[
-                    InkWell(
+                OutlineTextField(
+                  prefixIcon: Container(
+                    alignment: Alignment.center,
+                    padding: EdgeInsets.only(left: Sizes.s10),
+                    width: Sizes.s105,
+                    child: InkWell(
                       onTap: _openFilteredCountryPickerDialog,
                       child: _buildDialogItem(
                         _selectedFilteredDialogCountry,
                         showCountryName: false,
                       ),
                     ),
-                    Expanded(
-                      flex: 1,
-                      child: OutlineTextField(
-                        hintText:
-                        "${lang.translate('screen.register.phoneHint')}",
-                        labelText:
-                        "${lang.translate('screen.register.phoneLabel')}",
-                        hintStyle: TextStyle(fontSize: FontSize.s14),
-                        labelStyle: TextStyle(fontSize: FontSize.s14),
-                        textInputType: TextInputType.phone,
-                        controller: phoneController,
-                        maxLength: 9,
-                        validator: _validatePhone,
-                        focusNode: inputPhoneFocus,
-                      ),
-                    )
-                  ],
+                  ),
+                  hintText:
+                  "${lang.translate('screen.register.phoneHint')}",
+                  labelText:
+                  "${lang.translate('screen.register.phoneLabel')}",
+                  hintStyle: TextStyle(fontSize: FontSize.s14),
+                  labelStyle: TextStyle(fontSize: FontSize.s14),
+                  textInputType: TextInputType.phone,
+                  controller: phoneController,
+                  maxLength: 15,
+                  validator: _validatePhone,
+                  focusNode: inputPhoneFocus,
                 ),
                 SizedBox(
                   height: Sizes.s20,
                 ),
                 Align(
                   alignment: Alignment.bottomLeft,
-                  child: TextParagraph(
-                    data: "${lang.translate('screen.register.passwordAlt')}",
-                    size: Sizes.s10,
-                    weight: FontWeight.w400,
-                  ),
+                  child: Row(
+                    children: [
+                      TextParagraph(
+                        data: "${lang.translate('screen.register.passwordAlt')}",
+                        size: Sizes.s10,
+                        weight: FontWeight.w400,
+                      ),
+                      TextParagraph(
+                        data: "${lang.translate('screen.register.passwordAlt8Characters')}",
+                        size: Sizes.s10,
+                        weight: FontWeight.w400,
+                        color: defaultTextColor,
+                      ),
+                      TextParagraph(
+                        data: "${lang.translate('screen.register.passwordAltEnd')}",
+                        size: Sizes.s10,
+                        weight: FontWeight.w400,
+                      ),
+                    ],
+                  )
                 ),
                 SizedBox(
                   height: Sizes.s2,
@@ -287,9 +321,12 @@ class _RegisterUIState extends State<RegisterUI> {
                       });
                     },
                   ),
-                  prefixIcon: Icon(
-                    FlutterIcons.lock_outline_mdi,
-                    color: inputPasswordFocus.hasFocus ? secondaryColor : inputHint,
+                  prefixIcon: IconButton(
+                    iconSize: Sizes.s24,
+                    icon: Icon(
+                      FlutterIcons.lock_outline_mdi,
+                      color: inputPasswordFocus.hasFocus ? secondaryColor : inputHint,
+                    )
                   ),
                   controller: passwordController,
                   validator: _validatePassword,
@@ -323,7 +360,7 @@ class _RegisterUIState extends State<RegisterUI> {
                       ),
                       InkWell(
                         onTap: () =>{
-                          print("Terms of services")
+                          openWebView(context, "Terms of services", Routes.getTermsOfServicesUrl())
                         },
                         child: TextParagraph(
                           data: "${lang.translate('screen.register.termsOfServicesAlt')}",
@@ -339,7 +376,7 @@ class _RegisterUIState extends State<RegisterUI> {
                       ),
                       InkWell(
                         onTap: () => {
-                          print("Privacy Policy")
+                          openWebView(context, "Privacy Policy", Routes.getPrivacyPolicyUrl())
                         },
                         child: TextParagraph(
                           data: "${lang.translate('screen.register.privacyPolicyAlt')}",
