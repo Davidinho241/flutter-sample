@@ -132,6 +132,8 @@ class OutlinePinField extends StatelessWidget {
     final ThemeData mode = Theme.of(context);
     return Container(
       child: PinCodeTextField(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        focusNode: focusNode,
         appContext: appContext,
         length: length != null ? length : 6,
         controller: controller,
@@ -143,6 +145,7 @@ class OutlinePinField extends StatelessWidget {
         pinTheme: PinTheme(
           shape: PinCodeFieldShape.box,
           borderRadius: BorderRadius.circular(Sizes.s10),
+          borderWidth: 0,
           fieldHeight: Sizes.s50,
           fieldWidth: Sizes.s50,
           activeFillColor: Colors.indigoAccent,

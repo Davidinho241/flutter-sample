@@ -26,34 +26,32 @@ class ForgotPasswordUI extends StatefulWidget {
 
 class _ForgotPasswordUIState extends State<ForgotPasswordUI> {
   final phoneController = TextEditingController();
-  final passwordController = TextEditingController();
   FocusNode inputPhoneFocus;
-  FocusNode inputPasswordFocus;
 
   var _scaffoldKey = GlobalKey<ScaffoldState>();
   PersistentBottomSheetController persistentBottomSheetController;
   bool status = false;
   bool enable = true;
-
-  bool _obscurePassword = true;
   Country _selectedFilteredDialogCountry =
   CountryPickerUtils.getCountryByPhoneCode('237');
 
-  final _formKey = GlobalKey<FormState>();
+  var _formKey = GlobalKey<FormState>();
 
   @override
   void initState() {
     super.initState();
     inputPhoneFocus = FocusNode();
-    inputPasswordFocus = FocusNode();
+    inputPhoneFocus.addListener(() {
+      setState(() {
+        print("Has focus: ${inputPhoneFocus.hasFocus}");
+      });
+    });
   }
   @override
   void dispose() {
     // Clean up the controller when the widget is disposed.
     phoneController.dispose();
-    passwordController.dispose();
     inputPhoneFocus.dispose();
-    inputPasswordFocus.dispose();
     super.dispose();
   }
 
@@ -111,26 +109,10 @@ class _ForgotPasswordUIState extends State<ForgotPasswordUI> {
   Widget build(BuildContext context) {
     var lang = AppLocalizations.of(context);
 
-    String _validateField(String value) {
-      if (isRequired(value)) return "${lang.translate('screen.register.emptyFieldMessage')}";
-
-      if (value.length < 3) return "${lang.translate('screen.register.invalidLengthFieldMessage')}";
-
-      return null;
-    }
-
     String _validatePhone(String value) {
       if (isRequired(value)) return "${lang.translate('screen.register.emptyFieldMessage')}" ;
 
-      if (value.length < 9) return "${lang.translate('screen.register.invalidLengthPhoneMessage')}";
-
-      return null;
-    }
-
-    String _validatePassword(String value) {
-      if (isRequired(value)) return "${lang.translate('screen.register.emptyFieldMessage')}";
-
-      if (value.length < 8) return "${lang.translate('screen.register.invalidLengthPasswordMessage')}";
+      if (value.length < 4) return "${lang.translate('screen.register.invalidLengthPhoneMessage')}";
 
       return null;
     }
@@ -222,7 +204,7 @@ class _ForgotPasswordUIState extends State<ForgotPasswordUI> {
                           if(data['code'] == 1000){
                             final sharedPrefService = await SharedPreferencesService.instance;
                             await sharedPrefService.setPhone(_selectedFilteredDialogCountry.phoneCode+phoneController.text);
-                            openRemovePage(context, ValidateOtpUI(action: "forgot_password"));
+                            openRemovePage(context, ValidateOtpUI(action: 'forgot_password'));
                           }else if(data['code'] == 1002){
                             await dialogShow(context, "Oops an error !!!", "${lang.translate('screen.forgetPassword.errorPhoneValidation')}");
                           }else {
@@ -232,13 +214,9 @@ class _ForgotPasswordUIState extends State<ForgotPasswordUI> {
                           print(onError);
                           await dialogShow(context, "Oops an error !!!", "${lang.translate('screen.register.errorMessage')}");
                         }).whenComplete(() => {
-                              setState(()=>{
-                                print('Data receive'),
-                              })
-                            }),
+                        }),
                       ).whenComplete(() => {
-                        persistentBottomSheetController.close(),
-                        print("Future closed")
+                        persistentBottomSheetController.close,
                       });
                     },
                     fontSize: FontSize.s16,

@@ -68,6 +68,7 @@ class Sizes {
   static double s320 = 320.0;
   static double s326 = 326.0;
   static double s350 = 350.0;
+  static double s400 = 400.0;
   static double s450 = 450.0;
   static double s500 = 500.0;
   static double s600 = 600.0;

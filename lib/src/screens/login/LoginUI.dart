@@ -41,7 +41,7 @@ class _LoginUIState extends State<LoginUI> {
   Country _selectedFilteredDialogCountry =
   CountryPickerUtils.getCountryByPhoneCode('237');
 
-  final _formKey = GlobalKey<FormState>();
+  var _formKey = GlobalKey<FormState>();
 
   @override
   void initState() {
@@ -122,14 +122,6 @@ class _LoginUIState extends State<LoginUI> {
   @override
   Widget build(BuildContext context) {
     var lang = AppLocalizations.of(context);
-
-    String _validateField(String value) {
-      if (isRequired(value)) return "${lang.translate('screen.register.emptyFieldMessage')}";
-
-      if (value.length < 3) return "${lang.translate('screen.register.invalidLengthFieldMessage')}";
-
-      return null;
-    }
 
     String _validatePhone(String value) {
       if (isRequired(value)) return "${lang.translate('screen.register.emptyFieldMessage')}" ;
@@ -263,42 +255,42 @@ class _LoginUIState extends State<LoginUI> {
                   child: ButtonSystemTheme(
                     title: "${lang.translate('screen.login.loginButton')}",
                     onTap: () async {
-                      persistentBottomSheetController = _scaffoldKey.currentState.showBottomSheet((context) =>
-                          Container(
-                            child: CustomModal.loading(context, "${lang.translate('screen.register.progressMessage')}"),
-                          )
-                      );
-                      await Future.delayed(
-                        Duration(milliseconds: 5000),
-                            () => UserController().run(
-                            Routes.LOGIN,
-                            {
-                              "phone": _selectedFilteredDialogCountry.phoneCode+phoneController.text,
-                              "password": passwordController.text,
+                      if(_formKey.currentState.validate()){
+                        persistentBottomSheetController = _scaffoldKey.currentState.showBottomSheet((context) =>
+                            Container(
+                              child: CustomModal.loading(context, "${lang.translate('screen.register.progressMessage')}"),
+                            )
+                        );
+                        await Future.delayed(
+                          Duration(milliseconds: 5000),
+                              () => UserController().run(
+                              Routes.LOGIN,
+                              {
+                                "phone": _selectedFilteredDialogCountry.phoneCode+phoneController.text,
+                                "password": passwordController.text,
+                              }
+                          ).then((data) async {
+                            print(data);
+                            if(data['code'] == 1000){
+                              final sharedPrefService = await SharedPreferencesService.instance;
+                              await sharedPrefService.setPhone(_selectedFilteredDialogCountry.phoneCode+phoneController.text);
+                              openRemovePage(context, ValidateOtpUI(action: 'login'));
+                            }else if(data['code'] == 1002){
+                              await dialogShow(context, "Oops an error !!!", "${lang.translate('screen.register.errorPhoneValidation')}");
+                            }else {
+                              await dialogShow(context, "Oops an error !!!", data['message']);
                             }
-                        ).then((data) async {
-                          print(data);
-                          if(data['code'] == 1000){
-                            final sharedPrefService = await SharedPreferencesService.instance;
-                            await sharedPrefService.setPhone(_selectedFilteredDialogCountry.phoneCode+phoneController.text);
-                            openRemovePage(context, ValidateOtpUI(action: "login"));
-                          }else if(data['code'] == 1002){
-                            await dialogShow(context, "Oops an error !!!", "${lang.translate('screen.register.errorPhoneValidation')}");
-                          }else {
-                            await dialogShow(context, "Oops an error !!!", data['message']);
-                          }
-                        }).catchError((onError) async{
-                          print(onError);
-                          await dialogShow(context, "Oops an error !!!", "${lang.translate('screen.register.errorMessage')}");
-                        }).whenComplete(() => {
-                          setState(()=>{
+                          }).catchError((onError) async{
+                            print(onError);
+                            await dialogShow(context, "Oops an error !!!", "${lang.translate('screen.register.errorMessage')}");
+                          }).whenComplete(() => {
                             print('Data receive'),
-                          })
-                        }),
-                      ).whenComplete(() => {
-                        persistentBottomSheetController.close(),
-                        print("Future closed")
-                      });
+                          }),
+                        ).whenComplete(() => {
+                          persistentBottomSheetController.close(),
+                          print("Future closed")
+                        });
+                      }
                     },
                     fontSize: FontSize.s16,
                     weight: FontWeight.w500,

@@ -47,7 +47,7 @@ class _RegisterUIState extends State<RegisterUI> {
   Country _selectedFilteredDialogCountry =
       CountryPickerUtils.getCountryByPhoneCode('237');
 
-  final _formKey = GlobalKey<FormState>();
+  var _formKey = GlobalKey<FormState>();
 
   @override
   void initState() {
@@ -333,14 +333,12 @@ class _RegisterUIState extends State<RegisterUI> {
                   focusNode: inputPasswordFocus,
                 ),
                 SizedBox(
-                  height: Sizes.s20,
+                  height: Sizes.s8,
                 ),
                 Container(
-                  width: double.infinity,
-                  child:
-                  Row(
+                  width: double.maxFinite,
+                  child: Row(
                     mainAxisAlignment: MainAxisAlignment.start,
-                    mainAxisSize: MainAxisSize.min,
                     children: [
                       IconButton(
                         onPressed: (){
@@ -422,7 +420,7 @@ class _RegisterUIState extends State<RegisterUI> {
                               if(data['code'] == 1000){
                                 final sharedPrefService = await SharedPreferencesService.instance;
                                 await sharedPrefService.setPhone(_selectedFilteredDialogCountry.phoneCode+phoneController.text);
-                                openRemovePage(context, ValidateOtpUI(action: "register"));
+                                openRemovePage(context, ValidateOtpUI(action: 'register'));
                               }else if(data['code'] == 1002){
                                 await dialogShow(context, "Oops an error !!!", "${lang.translate('screen.register.errorPhoneValidation')}");
                               }else {
@@ -432,9 +430,7 @@ class _RegisterUIState extends State<RegisterUI> {
                               print(onError);
                               await dialogShow(context, "Oops an error !!!", "${lang.translate('screen.register.errorMessage')}");
                             }).whenComplete(() => {
-                              setState(()=>{
-                                print('Data receive'),
-                              })
+                              print('Data receive'),
                             }),
                         ).whenComplete(() => {
                           persistentBottomSheetController.close(),
@@ -450,7 +446,7 @@ class _RegisterUIState extends State<RegisterUI> {
                   ),
                 ),
                 SizedBox(
-                  height: Sizes.s70,
+                  height: Sizes.s50,
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -473,7 +469,10 @@ class _RegisterUIState extends State<RegisterUI> {
                       ),
                     )
                   ],
-                )
+                ),
+                SizedBox(
+                  height: Sizes.s50,
+                ),
               ],
             ),
           ),

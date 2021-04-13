@@ -5,8 +5,6 @@ import 'package:coinpay/src/helpers/localization.dart';
 import 'package:coinpay/src/helpers/modal.dart';
 import 'package:coinpay/src/helpers/navigation.dart';
 import 'package:coinpay/src/screens/dashboard/DashboardUI.dart';
-import 'package:coinpay/src/screens/registration/RegisterUI.dart';
-import 'package:coinpay/src/screens/validate_otp/ValidateOtpUI.dart';
 import 'package:coinpay/src/services/prefs_service.dart';
 import 'package:coinpay/src/utils/colors.dart';
 import 'package:coinpay/src/utils/sizes.dart';
@@ -15,9 +13,6 @@ import 'package:coinpay/src/widgets/inputs.dart';
 import 'package:coinpay/src/widgets/texts.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
-import 'package:country_pickers/country.dart';
-import 'package:country_pickers/country_picker_dialog.dart';
-import 'package:country_pickers/utils/utils.dart';
 import 'package:coinpay/src/helpers/validation.dart';
 
 class ResetPasswordUI extends StatefulWidget {
@@ -33,7 +28,7 @@ class ResetPasswordUI extends StatefulWidget {
 class _ResetPasswordUIState extends State<ResetPasswordUI> {
 
   final String code;
-  // receive data from the FirstScreen as a parameter
+
   _ResetPasswordUIState(this.code);
 
   final confirmPasswordController = TextEditingController();
@@ -48,7 +43,7 @@ class _ResetPasswordUIState extends State<ResetPasswordUI> {
 
   bool _obscurePassword = true;
 
-  final _formKey = GlobalKey<FormState>();
+  var _formKey = GlobalKey<FormState>();
 
   @override
   void initState() {
@@ -120,6 +115,9 @@ class _ResetPasswordUIState extends State<ResetPasswordUI> {
                     textAlign: TextAlign.left,
                     height: Sizes.s1,
                   ),
+                ),
+                SizedBox(
+                  height: Sizes.s20,
                 ),
                 Align(
                   alignment: Alignment.bottomLeft,
@@ -229,13 +227,9 @@ class _ResetPasswordUIState extends State<ResetPasswordUI> {
                           print(onError);
                           await dialogShow(context, "Oops an error !!!", "${lang.translate('screen.register.errorMessage')}");
                         }).whenComplete(() => {
-                          setState(()=>{
-                            print('Data receive'),
-                          })
                         }),
                       ).whenComplete(() => {
                         persistentBottomSheetController.close(),
-                        print("Future closed")
                       });
                     },
                     fontSize: FontSize.s16,

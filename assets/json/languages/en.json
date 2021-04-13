@@ -45,7 +45,7 @@
             "invalidOtp": "Invalid code! ",
             "invalidOtpMessage": "The code that you have entered is incorrect. ",
             "waitBeforeRefreshOtpMessage": "Please wait a few moments before",
-            "waitBeforeRefreshOtpMessage2": " resending the code. ",
+            "waitBeforeRefreshOtpMessage2": " resending the code (. ",
             "maxAttemptsMessage": "Maximun number of attempts reached!",
             "noAccountMessage": "Don't have an account?",
             "btnCreateAccount": "Create account",

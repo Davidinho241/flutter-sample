@@ -28,6 +28,10 @@ class SharedPreferencesService {
     return _instance;
   }
 
+  void clear(){
+    _preferences.clear();
+  }
+
   Future<void> setCurrency(String currCode) async =>
       await _preferences.setString(SharedPrefKeys.currencyCode, currCode);
 

@@ -8,7 +8,7 @@ import 'package:coinpay/src/models/User.dart';
 class UserController extends Controller{
 
   Future<Map<String, dynamic>> run(String route, Map<String, dynamic> data) async {
-    final http.Response response = await Controller().makeRequest(route, data);
+    final http.Response response = await Controller().makeRequest(route, data, null);
     if (response.statusCode == 200) {
       var jsonData = jsonDecode(response.body);
       return jsonData;
@@ -18,32 +18,10 @@ class UserController extends Controller{
     }
   }
 
-  Future<String> register(String route, Map<String, dynamic> data) async {
-    try{
-      var response = await run(route, data);
-      switch(response['code']){
-        case 1000 :
-          break;
-        case 1001 :
-          break;
-        case 1002 :
-          break;
-        case 1003 :
-          break;
-        case 1004 :
-          break;
-        case 1006 :
-          break;
-        case 1007 :
-          break;
-      }
-    }catch(exception){
-      return exception.toString();
-    }
-  }
-
-  Future<Map<String, dynamic>> login(String route, Map<String, dynamic> data) async{
-    final http.Response response = await Controller().makeRequest(route, data);
+  Future<Map<String, dynamic>> logout(String route) async {
+    final sharedPrefService = await SharedPreferencesService.instance;
+    var token = sharedPrefService.token;
+    final http.Response response = await Controller().fetchRequest(route , token);
     if (response.statusCode == 200) {
       var jsonData = jsonDecode(response.body);
       return jsonData;
@@ -51,22 +29,6 @@ class UserController extends Controller{
       print(response.body);
       throw Exception('Failed to load user');
     }
-  }
-
-  Future<User> logout(){
-
-  }
-
-  Future<User> me(){
-
-  }
-
-  Future<User> forgotPassword(){
-
-  }
-
-  Future<User> ResetPassword(){
-
   }
 
   Future<Map<String, dynamic>> verifyOTP(String route, Map<String, dynamic> data) async{
@@ -86,18 +48,22 @@ class UserController extends Controller{
           };
           break;
         case 1001 :
+          print(response['message']);
           return {
             'code':1001,
-            'error': "query error"
+            'error': "query error",
+            'message': response['message']
           };
           break;
         case 1002 :
+          print(response['message']);
           return {
             'code':1002,
             'error': "validation error"
           };
           break;
         default:
+          print(response['message']);
           return {
             'code':1001,
             'error': "Oops an Error !!!"
