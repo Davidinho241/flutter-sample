@@ -193,3 +193,75 @@ class CustomBackButton extends StatelessWidget {
     );
   }
 }
+
+// Used in Login & Register
+class WalletButton extends StatelessWidget {
+  final String title;
+  final String image;
+  final double height;
+  final Function onTap;
+  final IconData icon;
+  final Color color;
+  final double size;
+
+  WalletButton({
+    @required this.title,
+    @required this.image,
+    this.height,
+    @required this.onTap,
+    @required this.icon,
+    @required this.color,
+    this.size
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      onTap: onTap,
+      child: Container(
+        margin: EdgeInsets.only(right: Sizes.s20),
+        height: height != null ? height : Sizes.s30,
+        decoration: BoxDecoration(
+          color: color,
+          borderRadius: BorderRadius.all(
+            Radius.circular(Sizes.s6),
+          ),
+        ),
+        child: SizedBox(
+          width: size != null ? size : Sizes.s123,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Image.asset(
+                image,
+                height: Sizes.s12,
+              ),
+              SizedBox(width: Sizes.s10),
+              Text(
+                "$title",
+                style: GoogleFonts.heebo(
+                  color: Colors.white,
+                  fontSize: FontSize.s12,
+                  fontWeight: FontWeight.w500,
+                  fontStyle: FontStyle.normal,
+                  letterSpacing: Sizes.s1,
+                ),
+                textAlign: TextAlign.start,
+              ),
+              SizedBox(
+                width: Sizes.s10,
+              ),
+              Icon(
+                icon,
+                size: FontSize.s25,
+                color: Colors.white,
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+

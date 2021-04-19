@@ -1,7 +1,5 @@
 import 'dart:convert';
 
-import 'package:flutter/material.dart';
-
 import 'DefaultResponseAdapter.dart';
 
 class DefaultResponse<T> {
@@ -37,7 +35,7 @@ class DefaultResponse<T> {
 
   void addModelToList(T model) {
     if (_modelList == null) {
-      _modelList = new List();
+      _modelList = [];
     }
     _modelList.add(model);
   }

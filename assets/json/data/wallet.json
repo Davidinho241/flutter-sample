@@ -1,0 +1,20 @@
+[
+  {
+    "title": "Bitcoin",
+    "icon": "assets/images/icons/btc_logo.png",
+    "inactivatedIcon": "assets/images/icons/btc_logo_grey.png",
+    "currency": "BTC"
+  },
+  {
+    "title": "Tether",
+    "icon": "assets/images/icons/tether_logo.png",
+    "inactivatedIcon": "assets/images/icons/tether_logo_grey.png",
+    "currency": "USDT"
+  },
+  {
+    "title": "Ethereum",
+    "icon": "assets/images/icons/money-2.png",
+    "inactivatedIcon": "assets/images/icons/money-2.png",
+    "currency": "ETH"
+  }
+]

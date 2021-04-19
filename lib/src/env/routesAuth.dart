@@ -1,4 +1,4 @@
-class Routes {
+class RoutesAuth {
   static final String BASE_URL = 'https://coinpay-auth.herokuapp.com/api/v1/';
   static final String REGISTER = 'auth/register';
   static final String LOGIN = 'auth/login';

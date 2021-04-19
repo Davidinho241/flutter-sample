@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:coinpay/src/utils/themes.dart';
 import 'package:coinpay/src/utils/colors.dart';
 import 'package:coinpay/src/utils/sizes.dart';
 import 'package:google_fonts/google_fonts.dart';

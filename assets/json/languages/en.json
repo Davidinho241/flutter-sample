@@ -71,14 +71,19 @@
             "progressMessage": "Processing login..."
         },
         "dashboard": {
-            "firstAppBar": "Find Hotel Tonight",
-            "secondAppBar": "Notification",
-            "thirdAppBar": "Booking",
-            "fourhAppBar": "Account",
-            "firstTab": "Home",
-            "secondTab": "Notification",
-            "thirdTab": "Booking",
-            "fourthTab": "Account"
+            "firstAppBar": "Wallet",
+            "secondAppBar": "Transactions",
+            "thirdAppBar": "Markets",
+            "fourthAppBar": "Notifications",
+            "fifthAppBar": "Settings",
+            "firstTab": "Wallet",
+            "secondTab": "Transactions",
+            "thirdTab": "Markets",
+            "fourthTab": "Notifications",
+            "fifthTab": "Settings",
+            "btcCurrency": "Bitcoin",
+            "tetherCurrency": "Tether",
+            "ethereumCurrency": "Ethereum"
         },
         "home": {
             "searchHint": "Search",

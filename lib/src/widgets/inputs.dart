@@ -76,7 +76,6 @@ class OutlineTextField extends StatelessWidget {
   });
   @override
   Widget build(BuildContext context) {
-    final ThemeData mode = Theme.of(context);
     return Container(
       child: TextFormField(
         enabled: enable,
@@ -129,7 +128,6 @@ class OutlinePinField extends StatelessWidget {
   });
   @override
   Widget build(BuildContext context) {
-    final ThemeData mode = Theme.of(context);
     return Container(
       child: PinCodeTextField(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,

@@ -1,5 +1,5 @@
 import 'package:coinpay/src/controllers/UserController.dart';
-import 'package:coinpay/src/env/routes.dart';
+import 'package:coinpay/src/env/routesAuth.dart';
 import 'package:coinpay/src/helpers/dialog.dart';
 import 'package:coinpay/src/helpers/localization.dart';
 import 'package:coinpay/src/helpers/modal.dart';
@@ -149,11 +149,12 @@ class _ResetPasswordUIState extends State<ResetPasswordUI> {
                     },
                   ),
                   prefixIcon: IconButton(
-                      iconSize: Sizes.s24,
-                      icon: Icon(
-                        FlutterIcons.lock_outline_mdi,
-                        color: inputPasswordFocus.hasFocus ? secondaryColor : inputHint,
-                      )
+                    iconSize: Sizes.s24,
+                    icon: Icon(
+                      FlutterIcons.lock_outline_mdi,
+                      color: inputPasswordFocus.hasFocus ? secondaryColor : inputHint,
+                    ),
+                    onPressed: null,
                   ),
                   controller: passwordController,
                   validator: _validatePassword,
@@ -180,11 +181,12 @@ class _ResetPasswordUIState extends State<ResetPasswordUI> {
                     },
                   ),
                   prefixIcon: IconButton(
-                      iconSize: Sizes.s24,
-                      icon: Icon(
-                        FlutterIcons.lock_outline_mdi,
-                        color: confirmPasswordFocus.hasFocus ? secondaryColor : inputHint,
-                      )
+                    iconSize: Sizes.s24,
+                    icon: Icon(
+                      FlutterIcons.lock_outline_mdi,
+                      color: confirmPasswordFocus.hasFocus ? secondaryColor : inputHint,
+                    ),
+                    onPressed: null,
                   ),
                   controller: confirmPasswordController,
                   validator: _validateConfirmPassword,
@@ -207,7 +209,7 @@ class _ResetPasswordUIState extends State<ResetPasswordUI> {
                       await Future.delayed(
                         Duration(milliseconds: 5000),
                             () => UserController().run(
-                            Routes.RESET_PASSWORD,
+                            RoutesAuth().buildRoute(RoutesAuth.RESET_PASSWORD),
                             {
                               "phone": sharedPrefService.phone,
                               "password": passwordController.text,

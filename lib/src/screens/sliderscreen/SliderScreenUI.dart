@@ -5,6 +5,7 @@ import 'package:coinpay/src/services/local_service.dart';
 import 'package:coinpay/src/utils/colors.dart';
 import 'package:coinpay/src/utils/sizes.dart';
 import 'package:coinpay/src/widgets/buttons.dart';
+import 'package:coinpay/src/widgets/common_widgets.dart';
 import 'package:coinpay/src/widgets/texts.dart';
 import 'package:flutter/material.dart';
 import 'package:coinpay/src/helpers/navigation.dart';
@@ -128,46 +129,6 @@ class _SliderScreenUIState extends State<SliderScreenUI> {
           )
         ],
       )
-    );
-  }
-}
-
-// ignore: must_be_immutable
-class SliderTile extends StatelessWidget{
-  String imagePath, title, description;
-
-  SliderTile(this.imagePath, this.title, this.description);
-
-  @override
-  Widget build(BuildContext context) {
-    return Wrap(
-      children: [
-        Align(
-          alignment: Alignment.bottomCenter,
-          child: Image.asset(
-            imagePath,
-            alignment: Alignment.center,
-            height: MediaQuery.of(context).size.height/3.1,
-          ),
-        ),
-        SizedBox(height: Sizes.s10),
-        Container(
-          padding: EdgeInsets.only(left: Sizes.s24, right: Sizes.s24),
-          child: Column(
-            children: [
-              Container(
-                child: TextTitle(data : title),
-              ),
-              SizedBox(height: Sizes.s8),
-              Container(
-                padding: EdgeInsetsDirectional.only(start: Sizes.s20, end: Sizes.s20),
-                child: TextParagraph(data : description),
-              ),
-            ],
-          ),
-        ),
-        SizedBox(height: Sizes.s5)
-      ],
     );
   }
 }

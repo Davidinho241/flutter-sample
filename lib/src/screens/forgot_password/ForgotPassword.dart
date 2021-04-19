@@ -1,5 +1,5 @@
 import 'package:coinpay/src/controllers/UserController.dart';
-import 'package:coinpay/src/env/routes.dart';
+import 'package:coinpay/src/env/routesAuth.dart';
 import 'package:coinpay/src/helpers/dialog.dart';
 import 'package:coinpay/src/helpers/localization.dart';
 import 'package:coinpay/src/helpers/modal.dart';
@@ -195,7 +195,7 @@ class _ForgotPasswordUIState extends State<ForgotPasswordUI> {
                       await Future.delayed(
                         Duration(milliseconds: 2000),
                             () => UserController().run(
-                            Routes.FORGOT_PASSWORD,
+                            RoutesAuth().buildRoute(RoutesAuth.FORGOT_PASSWORD),
                             {
                               "phone": _selectedFilteredDialogCountry.phoneCode+phoneController.text,
                             }

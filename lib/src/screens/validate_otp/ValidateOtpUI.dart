@@ -12,7 +12,7 @@ import 'package:coinpay/src/utils/sizes.dart';
 import 'package:coinpay/src/widgets/buttons.dart';
 import 'package:coinpay/src/widgets/inputs.dart';
 import 'package:coinpay/src/controllers/UserController.dart';
-import 'package:coinpay/src/env/routes.dart';
+import 'package:coinpay/src/env/routesAuth.dart';
 import 'package:slide_countdown_clock/slide_countdown_clock.dart';
 import 'package:coinpay/src/helpers/dialog.dart';
 
@@ -79,7 +79,7 @@ class _ValidateOtpUIState extends State<ValidateOtpUI> {
       await Future.delayed(
         Duration(milliseconds: 5000),
             ()  =>  UserController().verifyOTP(
-            widget.action == "login" ? Routes.LOGIN_VERIFY_OTP : Routes.VERIFY_OTP ,
+            widget.action == "login" ? RoutesAuth().buildRoute(RoutesAuth.LOGIN_VERIFY_OTP) : RoutesAuth().buildRoute(RoutesAuth.VERIFY_OTP) ,
             {
               "phone": sharedPrefService.phone,
               "code": otpController.text,
@@ -89,18 +89,14 @@ class _ValidateOtpUIState extends State<ValidateOtpUI> {
           if(data['code'] == 1000){
             openRemovePage(context, DashboardUI());
           }else if(data['code'] == 1002){
-            setState(() {
-              requestAttemptsCounter = requestAttemptsCounter - 1;
-              hideButton = true;
-              sendRefreshCode = true;
-            });
+            requestAttemptsCounter = requestAttemptsCounter - 1;
+            hideButton = true;
+            sendRefreshCode = true;
             await dialogShow(context, "Oops an error !!!", "${lang.translate('screen.register.errorPhoneValidation')}");
           }else {
-            setState(() {
-              requestAttemptsCounter = requestAttemptsCounter - 1;
-              hideButton = true;
-              sendRefreshCode = true;
-            });
+            requestAttemptsCounter = requestAttemptsCounter - 1;
+            hideButton = true;
+            sendRefreshCode = true;
             await dialogShow(context, "Oops an error !!!", data['error']);
           }
         }).catchError((onError) async{
@@ -187,10 +183,8 @@ class _ValidateOtpUIState extends State<ValidateOtpUI> {
                                     ),
                                     separator: ":",
                                     onDone: (){
-                                      setState(() {
-                                        sendRefreshCode = true;
-                                        hideButton = true;
-                                      });
+                                      sendRefreshCode = true;
+                                      hideButton = true;
                                     },
                                   ),
                                   TextParagraph(
@@ -226,10 +220,8 @@ class _ValidateOtpUIState extends State<ValidateOtpUI> {
                                 ),
                                 InkWell(
                                   onTap: () async{
-                                    setState(() {
-                                      sendRefreshCode = false;
-                                      hideButton = false;
-                                    });
+                                    sendRefreshCode = false;
+                                    hideButton = false;
                                     persistentBottomSheetController = _scaffoldKey.currentState.showBottomSheet((context) =>
                                         Container(
                                           child: CustomModal.loading(context, "${lang.translate('screen.register.progressMessage')}"),
@@ -239,17 +231,15 @@ class _ValidateOtpUIState extends State<ValidateOtpUI> {
                                     await Future.delayed(
                                         Duration(milliseconds: 5000),
                                             ()  =>  UserController().run(
-                                            Routes.RESEND_OTP ,
+                                            RoutesAuth().buildRoute(RoutesAuth.RESEND_OTP) ,
                                             {
                                               "phone": sharedPrefService.phone,
                                             }
                                         )).then((data) async {
                                       print(data);
                                       if(data['code'] == 1000){
-                                        setState(() {
-                                          sendRefreshCode = false;
-                                          hideButton = false;
-                                        });
+                                        sendRefreshCode = false;
+                                        hideButton = false;
                                       }else {
                                         await dialogShow(context, "Oops an error !!!", data['message']);
                                       }
@@ -258,9 +248,7 @@ class _ValidateOtpUIState extends State<ValidateOtpUI> {
                                       await dialogShow(context, "Oops an error !!!", "${lang.translate('screen.register.errorMessage')}");
                                     }).whenComplete(() => {
                                       persistentBottomSheetController.close(),
-                                      setState(()=>{
-                                        print('Data receive'),
-                                      })
+                                      print('Data receive')
                                     });
                                   },
                                   child: TextParagraph(
@@ -324,10 +312,8 @@ class _ValidateOtpUIState extends State<ValidateOtpUI> {
                                 ),
                                 separator: ":",
                                 onDone: (){
-                                  setState(() {
-                                    sendRefreshCode = true;
-                                    hideButton = true;
-                                  });
+                                  sendRefreshCode = true;
+                                  hideButton = true;
                                 },
                               ),
                               TextParagraph(

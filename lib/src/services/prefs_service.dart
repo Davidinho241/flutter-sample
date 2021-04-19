@@ -2,7 +2,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class SharedPrefKeys {
   SharedPrefKeys._();
-  static const String currencyCode = 'currencyCode';
+  static const String cryptoCurrency = 'cryptoCurrency';
   static const String languageCode = 'languageCode';
   static const String token = 'token';
   static const String phone = 'phone';
@@ -32,11 +32,11 @@ class SharedPreferencesService {
     _preferences.clear();
   }
 
-  Future<void> setCurrency(String currCode) async =>
-      await _preferences.setString(SharedPrefKeys.currencyCode, currCode);
+  Future<void> setCryptoCurrency(String currency) async =>
+      await _preferences.setString(SharedPrefKeys.cryptoCurrency, currency);
 
-  String get currencyCode =>
-      _preferences.getString(SharedPrefKeys.currencyCode) ?? "\$";
+  String get cryptoCurrency =>
+      _preferences.getString(SharedPrefKeys.cryptoCurrency) ?? "\$";
 
   Future<void> setLanguage(String langCode) async =>
       await _preferences.setString(SharedPrefKeys.languageCode, langCode);

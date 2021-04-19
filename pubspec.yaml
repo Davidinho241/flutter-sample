@@ -40,6 +40,7 @@ dependencies:
   typicons_flutter: ^0.4.2
   pin_code_fields: ^7.0.0
   slide_countdown_clock: ^1.0.3
+  bottom_navy_bar: ^5.5.0
 
 flutter_icons:
   android: true

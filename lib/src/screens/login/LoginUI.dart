@@ -1,5 +1,5 @@
 import 'package:coinpay/src/controllers/UserController.dart';
-import 'package:coinpay/src/env/routes.dart';
+import 'package:coinpay/src/env/routesAuth.dart';
 import 'package:coinpay/src/helpers/dialog.dart';
 import 'package:coinpay/src/helpers/localization.dart';
 import 'package:coinpay/src/helpers/modal.dart';
@@ -222,11 +222,12 @@ class _LoginUIState extends State<LoginUI> {
                     },
                   ),
                   prefixIcon: IconButton(
-                      iconSize: Sizes.s24,
-                      icon: Icon(
-                        FlutterIcons.lock_outline_mdi,
-                        color: inputPasswordFocus.hasFocus ? secondaryColor : inputHint,
-                      )
+                    iconSize: Sizes.s24,
+                    icon: Icon(
+                      FlutterIcons.lock_outline_mdi,
+                      color: inputPasswordFocus.hasFocus ? secondaryColor : inputHint,
+                    ),
+                    onPressed: null,
                   ),
                   controller: passwordController,
                   validator: _validatePassword,
@@ -264,7 +265,7 @@ class _LoginUIState extends State<LoginUI> {
                         await Future.delayed(
                           Duration(milliseconds: 5000),
                               () => UserController().run(
-                              Routes.LOGIN,
+                              RoutesAuth().buildRoute(RoutesAuth.LOGIN),
                               {
                                 "phone": _selectedFilteredDialogCountry.phoneCode+phoneController.text,
                                 "password": passwordController.text,

@@ -17,7 +17,7 @@ import 'package:coinpay/src/utils/sizes.dart';
 import 'package:coinpay/src/widgets/buttons.dart';
 import 'package:coinpay/src/widgets/inputs.dart';
 import 'package:coinpay/src/controllers/UserController.dart';
-import 'package:coinpay/src/env/routes.dart';
+import 'package:coinpay/src/env/routesAuth.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:typicons_flutter/typicons_flutter.dart';
 import 'package:coinpay/src/helpers/dialog.dart';
@@ -218,7 +218,8 @@ class _RegisterUIState extends State<RegisterUI> {
                     icon: Icon(
                       Typicons.user_outline,
                       color: inputFirstNameFocus.hasFocus ? secondaryColor : inputHint,
-                    )
+                    ),
+                    onPressed: null,
                   ),
                   maxLength: 20,
                   validator: _validateField,
@@ -242,6 +243,7 @@ class _RegisterUIState extends State<RegisterUI> {
                       Typicons.user_add_outline,
                       color: inputLastNameFocus.hasFocus ? secondaryColor : inputHint,
                     ),
+                    onPressed: null,
                   ),
                   maxLength: 20,
                   validator: _validateField,
@@ -326,7 +328,8 @@ class _RegisterUIState extends State<RegisterUI> {
                     icon: Icon(
                       FlutterIcons.lock_outline_mdi,
                       color: inputPasswordFocus.hasFocus ? secondaryColor : inputHint,
-                    )
+                    ),
+                    onPressed: null,
                   ),
                   controller: passwordController,
                   validator: _validatePassword,
@@ -358,7 +361,7 @@ class _RegisterUIState extends State<RegisterUI> {
                       ),
                       InkWell(
                         onTap: () =>{
-                          openWebView(context, "Terms of services", Routes.getTermsOfServicesUrl())
+                          openWebView(context, "Terms of services", RoutesAuth.getTermsOfServicesUrl())
                         },
                         child: TextParagraph(
                           data: "${lang.translate('screen.register.termsOfServicesAlt')}",
@@ -374,7 +377,7 @@ class _RegisterUIState extends State<RegisterUI> {
                       ),
                       InkWell(
                         onTap: () => {
-                          openWebView(context, "Privacy Policy", Routes.getPrivacyPolicyUrl())
+                          openWebView(context, "Privacy Policy", RoutesAuth.getPrivacyPolicyUrl())
                         },
                         child: TextParagraph(
                           data: "${lang.translate('screen.register.privacyPolicyAlt')}",
@@ -406,7 +409,7 @@ class _RegisterUIState extends State<RegisterUI> {
                         );
                         await Future.delayed(
                           Duration(milliseconds: 5000),
-                            () async => await UserController().run(Routes.REGISTER,
+                            () async => await UserController().run(RoutesAuth().buildRoute(RoutesAuth.REGISTER),
                                 new User(
                                     id: 0,
                                     firstName: firstNameController.text,
