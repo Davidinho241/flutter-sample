@@ -36,7 +36,7 @@ class _ValidateOtpUIState extends State<ValidateOtpUI> {
   bool hideButton = false;
   bool sendRefreshCode = false;
 
-  final otpController = TextEditingController();
+  TextEditingController otpController = TextEditingController();
   FocusNode inputOtpFocus;
 
   @override
