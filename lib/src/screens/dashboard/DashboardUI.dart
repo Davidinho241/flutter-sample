@@ -2,6 +2,7 @@ import 'package:bottom_navy_bar/bottom_navy_bar.dart';
 import 'package:coinpay/src/components/walletsComponent.dart';
 import 'package:coinpay/src/helpers/localization.dart';
 import 'package:coinpay/src/screens/dashboard/market/MarketUI.dart';
+import 'package:coinpay/src/screens/dashboard/setting/SettingUI.dart';
 import 'package:coinpay/src/screens/dashboard/transaction/TransactionUI.dart';
 import 'package:coinpay/src/services/local_service.dart';
 import 'package:coinpay/src/services/prefs_service.dart';
@@ -12,6 +13,8 @@ import 'package:flutter/material.dart';
 import 'package:coinpay/src/utils/colors.dart';
 import 'package:coinpay/src/utils/sizes.dart';
 import 'package:google_fonts/google_fonts.dart';
+import '../../utils/colors.dart';
+import '../../utils/colors.dart';
 import 'home/HomeUI.dart';
 
 class DashboardUI extends StatefulWidget {
@@ -81,7 +84,7 @@ class _DashboardUIState extends State<DashboardUI> {
 
     return Scaffold(
       // if active tab is not account ui
-      appBar: currentIndex == 0
+      appBar: currentIndex == 0 || currentIndex == 3 || currentIndex == 4
           ? AppBar(
               elevation: 0,
               title: Row(
@@ -176,61 +179,103 @@ class _DashboardUIState extends State<DashboardUI> {
         children: <Widget>[
           HomeUI(),
           TransactionUI(),
-          MarketUI()
+          MarketUI(),
+          MarketUI(),
+          SettingUI(),
         ],
       ),
       bottomNavigationBar: BottomNavyBar(
         selectedIndex: currentIndex,
         showElevation: true,
         itemCornerRadius: 8,
-        curve: Curves.easeInBack,
+        curve: Curves.easeInOutCubic,
         onItemSelected: (index) => setState(() {
           currentIndex = index;
         }),
         items: [
           BottomNavyBarItem(
             icon: Image.asset(
-              "assets/images/icons/WalletFocus.png",
-              height: Sizes.s30,
+              currentIndex == 0 ? "assets/images/icons/WalletFocusIcons.png" : "assets/images/icons/WalletIcons.png",
+              height: currentIndex == 0 ? Sizes.s48 : Sizes.s32,
             ),
-            title: Text("${lang.translate('screen.dashboard.firstTab')}"),
-            activeColor: primaryColor,
+            title: Text(
+              "${lang.translate('screen.dashboard.firstTab')}",
+              style: GoogleFonts.heebo(
+                color: secondaryColor,
+                fontSize: FontSize.s10,
+                fontWeight: FontWeight.w300,
+                fontStyle: FontStyle.normal,
+              ),
+            ),
+            activeColor: activeTavColor,
             textAlign: TextAlign.center,
           ),
           BottomNavyBarItem(
             icon: Image.asset(
-              "assets/images/icons/Activity.png",
-              height: Sizes.s30,
+              currentIndex == 1 ? "assets/images/icons/ActivityFocusIcons.png" : "assets/images/icons/ActivityIcons.png",
+              height: currentIndex == 1 ? Sizes.s48 : Sizes.s32,
             ),
-            title: Text("${lang.translate('screen.dashboard.secondTab')}"),
-            activeColor: primaryColor,
+            title: Text(
+              "${lang.translate('screen.dashboard.secondTab')}",
+              style: GoogleFonts.heebo(
+                color: secondaryColor,
+                fontSize: FontSize.s10,
+                fontWeight: FontWeight.w300,
+                fontStyle: FontStyle.normal,
+              ),
+            ),
+            activeColor: activeTavColor,
             textAlign: TextAlign.center,
           ),
           BottomNavyBarItem(
             icon: Image.asset(
-              "assets/images/icons/Chart.png",
-              height: Sizes.s30,
+              currentIndex == 2 ? "assets/images/icons/MarketFocusIcons.png" : "assets/images/icons/MarketIcons.png",
+              height: currentIndex == 2 ? Sizes.s48 : Sizes.s32,
             ),
-            title: Text("${lang.translate('screen.dashboard.thirdTab')}"),
-            activeColor: primaryColor,
+            title: Text(
+              "${lang.translate('screen.dashboard.thirdTab')}",
+              style: GoogleFonts.heebo(
+                color: secondaryColor,
+                fontSize: FontSize.s10,
+                fontWeight: FontWeight.w300,
+                fontStyle: FontStyle.normal,
+              ),
+            ),
+            activeColor: activeTavColor,
             textAlign: TextAlign.center,
           ),
           BottomNavyBarItem(
             icon: Image.asset(
-              "assets/images/icons/Notification.png",
-              height: Sizes.s30,
+              currentIndex == 3 ? "assets/images/icons/NotificationFocusIcons.png" : "assets/images/icons/NotificationIcon.png",
+              height: currentIndex == 3 ? Sizes.s48 : Sizes.s32,
             ),
-            title: Text("${lang.translate('screen.dashboard.fourthTab')}"),
-            activeColor: primaryColor,
+            title: Text(
+              "${lang.translate('screen.dashboard.fourthTab')}",
+              style: GoogleFonts.heebo(
+                color: secondaryColor,
+                fontSize: FontSize.s10,
+                fontWeight: FontWeight.w300,
+                fontStyle: FontStyle.normal,
+              ),
+            ),
+            activeColor: activeTavColor,
             textAlign: TextAlign.center,
           ),
           BottomNavyBarItem(
             icon: Image.asset(
-              "assets/images/icons/Setting.png",
-              height: Sizes.s30,
+              currentIndex == 4 ? "assets/images/icons/SettingFocusIcons.png" : "assets/images/icons/SettingIcons.png",
+              height: currentIndex == 4 ? Sizes.s48 : Sizes.s32,
             ),
-            title: Text("${lang.translate('screen.dashboard.fifthTab')}"),
-            activeColor: primaryColor,
+            title: Text(
+              "${lang.translate('screen.dashboard.fifthTab')}",
+              style: GoogleFonts.heebo(
+                color: secondaryColor,
+                fontSize: FontSize.s10,
+                fontWeight: FontWeight.w300,
+                fontStyle: FontStyle.normal,
+              ),
+            ),
+            activeColor: activeTavColor,
             textAlign: TextAlign.center,
           ),
         ],

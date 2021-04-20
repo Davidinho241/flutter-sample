@@ -28,6 +28,7 @@ class Sizes {
   static double s24 = 24.0;
   static double s25 = 25.0;
   static double s30 = 30.0;
+  static double s32 = 32.0;
   static double s31m25 = 31.5;
   static double s35 = 35.0;
   static double s36 = 36.0;

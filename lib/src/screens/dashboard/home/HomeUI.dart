@@ -21,18 +21,17 @@ class HomeUI extends StatefulWidget {
 
 class _HomeUIState extends State<HomeUI> {
   List<Wallet> wallets = []; // history data
-  bool _loaded = true; // is loaded
+  bool _loaded = false; // is loaded
 
   @override
   void initState() {
     super.initState();
-    // LocalService.loadWallets().then((value) {
-    //   setState(() {
-    //     _loaded = true;
-    //     wallets = value;
-    //     print(wallets);
-    //   });
-    // });
+    LocalService.loadWallets().then((value) {
+      setState(() {
+        _loaded = true;
+        wallets = value;
+      });
+    });
   }
 
   var _scaffoldKey = GlobalKey<ScaffoldState>();
