@@ -14,3 +14,7 @@ final Color primaryColor90 = Color(0xe6031b3a);
 final Color primaryColor50 = Color(0x80031b3a);
 final Color currencyBtnColor = Color(0xff275adb);
 final Color activeTavColor = Color(0xffebeefc);
+final Color colorPrimary = Color(0xff3D6BDF);
+final Color colorSecondary = Color(0xe63d6bdf);
+final Color colorActivateCardCurrency = Color(0xffb4c5f1);
+final Color colorIconAction = Color(0xff4f6ef7);

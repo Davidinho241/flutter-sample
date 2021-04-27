@@ -31,7 +31,7 @@ dependencies:
   flutter_webview_plugin: ^0.3.11
   flutter_screenutil: ^2.3.1
   google_fonts: ^1.1.0
-  flutter_svg: ^0.19.3
+  flutter_svg: ^0.22.0
   intl: ^0.17.0
   flutter_icons: ^1.1.0
   mvc_pattern: ^6.6.3+2
@@ -41,6 +41,7 @@ dependencies:
   pin_code_fields: ^7.0.0
   slide_countdown_clock: ^1.0.3
   bottom_navy_bar: ^5.5.0
+  provider: ^4.3.3
 
 flutter_icons:
   android: true

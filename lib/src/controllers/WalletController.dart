@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'package:coinpay/src/services/prefs_service.dart';
-
 import '../models/Wallet.dart';
 import 'Controller.dart';
 import 'package:http/http.dart' as http;
@@ -20,24 +19,33 @@ class WalletController extends Controller{
   }
 
   Future<List<Wallet>> getWallets(String route) async {
-    try{
-      final sharedPrefService = await SharedPreferencesService.instance;
-      var token = sharedPrefService.token;
-      final http.Response response = await Controller().fetchRequest(route , token);
-      if (response.statusCode == 200) {
-        print(response.body);
+    final sharedPrefService = await SharedPreferencesService.instance;
+    var token = sharedPrefService.token;
+    final http.Response response = await Controller().fetchRequest(route , token);
+    if (response.statusCode == 200) {
+      print(response.body);
 
-        // print(response.body);
-        var jsonData = jsonDecode(response.body);
-        List<Wallet> data = [];
-        jsonData["data"].forEach((index, value) => data.add(Wallet.fromJson(value)));
-        return data;
-      } else {
-        print(response.body);
-        return null;
-      }
-    }catch(exception){
-      print(exception);
+      var jsonData = jsonDecode(response.body);
+      List<Wallet> data = jsonData["data"].map<Wallet>((json) => Wallet.fromJson(json))
+          .toList();
+      return data;
+    } else {
+      print(response.body);
+      return null;
+    }
+  }
+
+  Future<Map<String, dynamic>> getRateTable(String route) async {
+    final sharedPrefService = await SharedPreferencesService.instance;
+    var token = sharedPrefService.token;
+    final http.Response response = await Controller().fetchRequest(route , token);
+    if (response.statusCode == 200) {
+      print(response.body);
+      var jsonData = jsonDecode(response.body);
+
+      return jsonData["data"];
+    } else {
+      print(response.body);
       return null;
     }
   }

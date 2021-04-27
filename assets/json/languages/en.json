@@ -225,7 +225,7 @@
         "wallet": {
             "appBar": "Wallet",
             "points": "points",
-            "accountBalance": "Account Balance",
+            "accountBalance": "Total cash balance",
             "topUp": "Top Up"
         },
         "reviews": {

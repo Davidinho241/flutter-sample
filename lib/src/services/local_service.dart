@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:coinpay/src/components/actionsComponent.dart';
 import 'package:coinpay/src/components/slidersComponent.dart';
 import 'package:coinpay/src/components/walletsComponent.dart';
 import 'package:coinpay/src/controllers/WalletController.dart';
@@ -25,6 +26,14 @@ class LocalService {
     return data;
   }
 
+  static Future<List<ActionComponent>> getActions() async{
+    var result = await rootBundle.loadString('assets/json/data/action.json');
+    var data = (json.decode(result) as List)
+        .map<ActionComponent>((json) => ActionComponent.fromJson(json))
+        .toList();
+    return data;
+  }
+
   static Future<List<Transaction>> loadTransactionHistory() async {
     await Future.delayed(Duration(milliseconds: 2000));
     var result = await rootBundle.loadString('assets/json/data/history.json');
@@ -37,6 +46,12 @@ class LocalService {
   static Future<List<Wallet>> loadWallets() async {
     await Future.delayed(Duration(milliseconds: 15000));
     var result = await WalletController().getWallets(RoutesWallet().buildRoute(RoutesWallet.WALLETS_INFO));
+    return result;
+  }
+
+  static Future<Map<String, dynamic>> loadRateTable() async {
+    await Future.delayed(Duration(milliseconds: 15000));
+    var result = await WalletController().getRateTable(RoutesWallet().buildRoute(RoutesWallet.RATE_INFO));
     return result;
   }
 }

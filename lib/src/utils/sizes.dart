@@ -14,6 +14,7 @@ class Sizes {
   static double s4 = 4.0;
   static double s5 = 5.0;
   static double s6 = 6.0;
+  static double s7 = 7.0;
   static double s8 = 8.0;
   static double s9 = 9.0;
   static double s10 = 10.0;
@@ -51,6 +52,7 @@ class Sizes {
   static double s130 = 130.0;
   static double s140 = 140.0;
   static double s150 = 150.0;
+  static double s160 = 160.0;
   static double s165 = 165.0;
   static double s173 = 173.0;
   static double s180 = 180.0;

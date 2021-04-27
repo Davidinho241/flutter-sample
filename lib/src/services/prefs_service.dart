@@ -3,6 +3,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 class SharedPrefKeys {
   SharedPrefKeys._();
   static const String cryptoCurrency = 'cryptoCurrency';
+  static const String currencyCode = 'currencyCode';
   static const String languageCode = 'languageCode';
   static const String token = 'token';
   static const String phone = 'phone';
@@ -37,6 +38,12 @@ class SharedPreferencesService {
 
   String get cryptoCurrency =>
       _preferences.getString(SharedPrefKeys.cryptoCurrency) ?? "\$";
+
+  Future<void> setCurrency(String currCode) async =>
+      await _preferences.setString(SharedPrefKeys.currencyCode, currCode);
+
+  String get currencyCode =>
+      _preferences.getString(SharedPrefKeys.currencyCode) ?? "USD";
 
   Future<void> setLanguage(String langCode) async =>
       await _preferences.setString(SharedPrefKeys.languageCode, langCode);

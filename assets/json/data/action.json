@@ -1,0 +1,14 @@
+[
+  {
+    "title": "Cash out",
+    "icon": "assets/images/icons/ArrowUp.svg"
+  },
+  {
+    "title": "Receive Coins",
+    "icon": "assets/images/icons/AddOutline.svg"
+  },
+  {
+    "title": "Send Coins",
+    "icon": "assets/images/icons/RemoveOutline.svg"
+  }
+]

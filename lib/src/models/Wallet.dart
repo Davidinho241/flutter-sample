@@ -6,9 +6,10 @@ class Wallet {
   String human;
   String description;
   double balance;
+  bool isActivated;
 
   Wallet(this.id, this.userId, this.name, this.cryptoCurrency, this.human,
-      this.description, this.balance);
+      this.description, this.balance, {this.isActivated = false});
 
   Wallet.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -17,7 +18,8 @@ class Wallet {
     cryptoCurrency = json['cryptoCurrency'];
     human = json['human'];
     description = json['description'];
-    balance = json['balance'].toDouble();
+    balance = 2.0;
+    isActivated = false;
   }
 
   Map<String, dynamic> toJson() => {
@@ -28,6 +30,7 @@ class Wallet {
     "human": human,
     "description": description,
     "balance": balance,
+    "isActivated": isActivated
   };
 
   String toString() => "{"
@@ -37,6 +40,7 @@ class Wallet {
     +"cryptoCurrency :"+cryptoCurrency+", "
     +"human :"+human+", "
     +"description :"+description+", "
+    +"isActivated :"+isActivated.toString()+", "
     +"balance : $balance"
     +"}"
   ;
