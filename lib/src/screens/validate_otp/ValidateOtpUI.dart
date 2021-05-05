@@ -49,6 +49,7 @@ class _ValidateOtpUIState extends State<ValidateOtpUI> {
       });
     });
   }
+
   @override
   void dispose() {
     // Clean up the controller when the widget is disposed.
@@ -89,14 +90,18 @@ class _ValidateOtpUIState extends State<ValidateOtpUI> {
           if(data['code'] == 1000){
             openRemovePage(context, DashboardUI());
           }else if(data['code'] == 1002){
-            requestAttemptsCounter = requestAttemptsCounter - 1;
-            hideButton = true;
-            sendRefreshCode = true;
+            setState(() {
+              requestAttemptsCounter = requestAttemptsCounter - 1;
+              hideButton = true;
+              sendRefreshCode = true;
+            });
             await dialogShow(context, "Oops an error !!!", "${lang.translate('screen.register.errorPhoneValidation')}");
           }else {
-            requestAttemptsCounter = requestAttemptsCounter - 1;
-            hideButton = true;
-            sendRefreshCode = true;
+            setState(() {
+              requestAttemptsCounter = requestAttemptsCounter - 1;
+              hideButton = true;
+              sendRefreshCode = true;
+            });
             await dialogShow(context, "Oops an error !!!", data['error']);
           }
         }).catchError((onError) async{
@@ -238,8 +243,10 @@ class _ValidateOtpUIState extends State<ValidateOtpUI> {
                                         )).then((data) async {
                                       print(data);
                                       if(data['code'] == 1000){
-                                        sendRefreshCode = false;
-                                        hideButton = false;
+                                        setState(() {
+                                          sendRefreshCode = false;
+                                          hideButton = false;
+                                        });
                                       }else {
                                         await dialogShow(context, "Oops an error !!!", data['message']);
                                       }

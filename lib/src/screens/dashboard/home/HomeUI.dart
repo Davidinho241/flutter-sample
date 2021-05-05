@@ -15,12 +15,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class HomeUI extends StatefulWidget {
+
+  const HomeUI({Key key}) : super(key: key);
+
   @override
   _HomeUIState createState() => _HomeUIState();
 }
 
 class _HomeUIState extends State<HomeUI> {
-  List<Wallet> wallets = []; // history data
+  List<Wallet> _wallets = []; // history data
   Map<String, dynamic> rates ; // history data
   List<ActionComponent> _actions = [];
   bool _loaded = false; // is loaded
@@ -28,9 +31,16 @@ class _HomeUIState extends State<HomeUI> {
   var _scaffoldKey = GlobalKey<ScaffoldState>();
   PersistentBottomSheetController persistentBottomSheetController;
   String to;
+  Wallet currentWallet;
+
+  void updateWallets(List<Wallet> wallets) {
+    setState(() {
+      _wallets = wallets;
+      currentWallet = wallets.first;
+    });
+  }
 
   initializeData() async {
-
     final sharedPrefService = await SharedPreferencesService.instance;
     to = sharedPrefService.currencyCode;
 
@@ -43,13 +53,14 @@ class _HomeUIState extends State<HomeUI> {
     await LocalService.loadWallets().then((value) {
       setState(() {
         _loaded = true;
-        wallets = value;
-        wallets.first.isActivated = true;
+        _wallets = value;
 
-        if (wallets != null)
-          wallets.forEach((element) {
+        if (_wallets != null){
+          _wallets.first.isActivated = true;
+          _wallets.forEach((element) {
             sum += convertBalance(element.balance, rates["${element.cryptoCurrency+"-"+to}"].toDouble());
           });
+        }
       });
     });
 
@@ -92,7 +103,7 @@ class _HomeUIState extends State<HomeUI> {
                 Align(
                   alignment: Alignment.bottomLeft,
                   child: TextParagraph(
-                    data: "\$ $sum",
+                    data: "\$"+priceParser.format(sum),
                     weight: FontWeight.w700,
                     size: Sizes.s31m25,
                     textAlign: TextAlign.left,
@@ -102,26 +113,27 @@ class _HomeUIState extends State<HomeUI> {
                 ),
                 SizedBox(height: Sizes.s10),
                 Container(
-                  height: MediaQuery.of(context).size.height * 0.2,
+                  height: 180,
                   child: ListView.builder(
                     shrinkWrap: true,
                     scrollDirection: Axis.horizontal,
-                    itemCount: wallets != null ? wallets.length : 0,
+                    itemCount: _wallets != null ? _wallets.length : 0,
                     itemBuilder: (context, index) {
                       return GestureDetector(
                         onTap: () async {
                           final sharedPrefService = await SharedPreferencesService.instance;
-                          sharedPrefService.setCryptoCurrency(wallets[index].cryptoCurrency);
+                          sharedPrefService.setCryptoCurrency(_wallets[index].cryptoCurrency);
                           setState(() {
-                            wallets.forEach((element) {
+                            _wallets.forEach((element) {
                               element.isActivated = false;
                             });
-                            wallets[index].isActivated = !wallets[index].isActivated;
+                            _wallets[index].isActivated = !_wallets[index].isActivated;
+                            currentWallet = _wallets[index];
                           });
                         },
                         child: WalletCards(
-                          wallet: wallets[index],
-                          isActivated: wallets[index].isActivated,
+                          wallet: _wallets[index],
+                          isActivated: _wallets[index].isActivated,
                           rates: rates,
                         ),
                       );
@@ -130,7 +142,7 @@ class _HomeUIState extends State<HomeUI> {
                 ),
                 SizedBox(height: Sizes.s20),
                 Container(
-                  height: MediaQuery.of(context).size.height * 0.2,
+                  height: 500,
                   child: ListView.builder(
                     physics: const NeverScrollableScrollPhysics(),
                     scrollDirection: Axis.vertical,
@@ -154,8 +166,9 @@ class _HomeUIState extends State<HomeUI> {
                             height: Sizes.s1,
                             color: defaultTextColor,
                           ),
-                          onTap: (){
-                            openPage(context, ActionUI(wallets: wallets, action: '', rates: rates,));
+                          onTap: index == 0 ? null : () async {
+                            final wallets = await openPage(context, ActionUI(wallets: _wallets, action: _actions[index].title, rates: rates));
+                            updateWallets(wallets);
                           },
                         ),
                       );

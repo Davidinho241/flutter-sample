@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:coinpay/src/screens/webview/WebviewUI.dart';
 
 openPage(BuildContext context, Widget page) {
-  Navigator.push(
+  return Navigator.push(
     context,
     MaterialPageRoute(
       builder: (context) => page,
@@ -11,7 +11,7 @@ openPage(BuildContext context, Widget page) {
 }
 
 openRemovePage(BuildContext context, Widget page) {
-  Navigator.pushAndRemoveUntil(
+  return Navigator.pushAndRemoveUntil(
     context,
     MaterialPageRoute(
       builder: (context) => page,

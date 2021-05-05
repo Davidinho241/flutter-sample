@@ -42,6 +42,10 @@ dependencies:
   slide_countdown_clock: ^1.0.3
   bottom_navy_bar: ^5.5.0
   provider: ^4.3.3
+  qr_code_scanner: ^0.4.0
+  qr_flutter: ^4.0.0
+  fluttertoast: ^8.0.6
+  share: ^2.0.1
 
 flutter_icons:
   android: true

@@ -19,33 +19,47 @@ class WalletController extends Controller{
   }
 
   Future<List<Wallet>> getWallets(String route) async {
-    final sharedPrefService = await SharedPreferencesService.instance;
-    var token = sharedPrefService.token;
-    final http.Response response = await Controller().fetchRequest(route , token);
-    if (response.statusCode == 200) {
-      print(response.body);
+    try{
+      final sharedPrefService = await SharedPreferencesService.instance;
+      var token = sharedPrefService.token;
+      final http.Response response = await Controller().fetchRequest(route , token);
+      if (response.statusCode == 200) {
+        print(response.body);
 
-      var jsonData = jsonDecode(response.body);
-      List<Wallet> data = jsonData["data"].map<Wallet>((json) => Wallet.fromJson(json))
-          .toList();
-      return data;
-    } else {
-      print(response.body);
+        var jsonData = jsonDecode(response.body);
+
+        if(jsonData["data"] == null)
+          return null;
+
+        List<Wallet> data = jsonData["data"].map<Wallet>((json) => Wallet.fromJson(json))
+            .toList();
+        return data;
+      } else {
+        print(response.body);
+        return null;
+      }
+    }catch(exception){
+      print(exception);
       return null;
     }
   }
 
   Future<Map<String, dynamic>> getRateTable(String route) async {
-    final sharedPrefService = await SharedPreferencesService.instance;
-    var token = sharedPrefService.token;
-    final http.Response response = await Controller().fetchRequest(route , token);
-    if (response.statusCode == 200) {
-      print(response.body);
-      var jsonData = jsonDecode(response.body);
+    try{
+      final sharedPrefService = await SharedPreferencesService.instance;
+      var token = sharedPrefService.token;
+      final http.Response response = await Controller().fetchRequest(route , token);
+      if (response.statusCode == 200) {
+        print(response.body);
+        var jsonData = jsonDecode(response.body);
 
-      return jsonData["data"];
-    } else {
-      print(response.body);
+        return jsonData["data"];
+      } else {
+        print(response.body);
+        return null;
+      }
+    }catch(exception){
+      print(exception);
       return null;
     }
   }

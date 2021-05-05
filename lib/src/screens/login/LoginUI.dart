@@ -272,7 +272,7 @@ class _LoginUIState extends State<LoginUI> {
                               }
                           ).then((data) async {
                             print(data);
-                            if(data['code'] == 1000){
+                            if(data['code'] == 1000 || data['code'] == 1100){
                               final sharedPrefService = await SharedPreferencesService.instance;
                               await sharedPrefService.setPhone(_selectedFilteredDialogCountry.phoneCode+phoneController.text);
                               openRemovePage(context, ValidateOtpUI(action: 'login'));

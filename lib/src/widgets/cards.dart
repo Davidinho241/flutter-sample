@@ -163,7 +163,7 @@ class WalletCards extends StatelessWidget {
                     Expanded(
                       flex: 1,
                       child: TextParagraph(
-                        data: userCurrencySymbol(context)+" ${convertBalance(wallet.balance, rates["${wallet.cryptoCurrency+"-"+userCurrencyName(context)}"].toDouble())}",
+                        data: userCurrencySymbol(context)+priceParser.format(convertBalance(wallet.balance, rates["${wallet.cryptoCurrency+"-"+userCurrencyName(context)}"].toDouble())),
                         color: isActivated? Colors.white : primaryColor90,
                         size: FontSize.s14,
                         weight: FontWeight.w600,

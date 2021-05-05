@@ -1,4 +1,3 @@
-import 'package:coinpay/src/services/prefs_service.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -17,3 +16,6 @@ String userCurrencyName(BuildContext context) {
 double convertBalance(double amount, double rate){
   return amount*rate;
 }
+
+
+final priceParser = NumberFormat("#,###.######", "en_US");

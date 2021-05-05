@@ -222,6 +222,20 @@
             "tosTitle": "Terms of Service",
             "tosSubtitle": "App Terms of Service"
         },
+        "transactionScreen": {
+            "appBarSend": "Transfer Coins",
+            "appBarReceive": "Receive Coins",
+            "subtitleSend": "Coins for withdrawal",
+            "subtitleReceive": "Coins for deposit",
+            "emptyCoinsTitle": "Your wallet is empty!",
+            "emptyCoinsContent": "Look like there are no coins in your wallet. Please add coins to enjoy this service.",
+            "btnBuyCoins": "Buy Coins",
+            "btnSend": "Send Coins",
+            "btnShare": "Share Address",
+            "inputHintAmount": "Amount to be send",
+            "inputHintAddress": "Recipient's Address",
+            "appBarQrCodeScan": "QrCode scan"
+        },
         "wallet": {
             "appBar": "Wallet",
             "points": "points",
