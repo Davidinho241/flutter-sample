@@ -1,17 +1,17 @@
 [
   {
     "title": "Cash out your coins anytime",
-    "imagePath": "assets/images/misc/cash_out_illustrations.png",
+    "imagePath": "assets/images/misc/cash_out_illustrations.svg",
     "description": "Use local money transfer like Orange Money and Mobile Money, or banking services like VISA/Paypal."
   },
   {
     "title": "Keep coins safe in your wallet",
-    "imagePath": "assets/images/misc/safe _in _wallet_illustrations.png",
+    "imagePath": "assets/images/misc/safe _in _wallet_illustrations.svg",
     "description": "Convert BTC coins held in your wallet to USDT and vice versa as you wish."
   },
   {
     "title": "Low cost fees in your transactions",
-    "imagePath": "assets/images/misc/cash_out_illustrations.png",
+    "imagePath": "assets/images/misc/low_cost_Illustrations.svg",
     "description": "Buy and sell, or send and receive coins at flexible costs."
   }
 ]

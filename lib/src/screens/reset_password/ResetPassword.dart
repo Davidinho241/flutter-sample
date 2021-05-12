@@ -84,9 +84,12 @@ class _ResetPasswordUIState extends State<ResetPasswordUI> {
     }
 
     String _validatePassword(String value) {
+      String  pattern = r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#\$&*~]).{8,}$';
+      RegExp regExp = new RegExp(pattern);
+
       if (isRequired(value)) return "${lang.translate('screen.register.emptyFieldMessage')}";
 
-      if (value.length < 8) return "${lang.translate('screen.register.invalidLengthPasswordMessage')}";
+      if (!regExp.hasMatch(value)) return "${lang.translate('screen.register.invalidLengthPasswordMessage')}";
 
       return null;
     }

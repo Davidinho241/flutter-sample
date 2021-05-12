@@ -3,6 +3,7 @@ import 'package:coinpay/src/utils/sizes.dart';
 import 'package:coinpay/src/widgets/texts.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 // ignore: must_be_immutable
@@ -66,35 +67,90 @@ class SliderTile extends StatelessWidget{
 
   @override
   Widget build(BuildContext context) {
-    return Wrap(
+    return Column(
       children: [
+        SizedBox(height: (MediaQuery.of(context).size.width < 400 ||
+            MediaQuery.of(context).size.height < 400) ? Sizes.s40 : Sizes.s90),
         Align(
           alignment: Alignment.bottomCenter,
-          child: Image.asset(
+          child: SvgPicture.asset(
             imagePath,
             alignment: Alignment.center,
-            height: MediaQuery.of(context).size.height/3.1,
+            height: (MediaQuery.of(context).size.width < 400 ||
+                MediaQuery.of(context).size.height < 400) ?
+                  MediaQuery.of(context).size.height/4.2 : MediaQuery.of(context).size.height/4.8,
           ),
         ),
-        SizedBox(height: Sizes.s10),
-        Container(
-          padding: EdgeInsets.only(left: Sizes.s24, right: Sizes.s24),
-          child: Column(
-            children: [
-              Container(
-                child: TextTitle(data : title),
-              ),
-              SizedBox(height: Sizes.s8),
-              Container(
-                padding: EdgeInsetsDirectional.only(start: Sizes.s20, end: Sizes.s20),
-                child: TextParagraph(data : description),
-              ),
-            ],
+        SizedBox(height: (MediaQuery.of(context).size.width < 400 ||
+            MediaQuery.of(context).size.height < 400) ? Sizes.s40 : Sizes.s90),
+        Center(
+          child: Container(
+            padding: EdgeInsets.only(left: Sizes.s24, right: Sizes.s24),
+            child: Column(
+              children: [
+                Container(
+                  child: TextTitle(data : title),
+                ),
+                SizedBox(height: Sizes.s20),
+                Container(
+                  padding: EdgeInsetsDirectional.only(start: Sizes.s24, end: Sizes.s24),
+                  child: TextParagraph(data : description),
+                ),
+              ],
+            ),
           ),
         ),
         SizedBox(height: Sizes.s5)
       ],
     );
   }
+}
+
+
+Widget displayError(BuildContext context, {String error}){
+  return Card(
+    elevation: 0,
+    shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(Sizes.s8)
+    ),
+    color: errorDisplayColor,
+    child: SizedBox(
+      height: Sizes.s55,
+      width: MediaQuery.of(context).size.width,
+      child: Center(
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            SvgPicture.asset(
+              "assets/images/icons/infoCircleIcon.svg",
+              alignment: Alignment.center,
+              height: Sizes.s20,
+              color: Colors.red,
+            ),
+            SizedBox(
+              width: Sizes.s10,
+            ),
+            Text.rich(
+              TextSpan(
+                text: 'Oops Error :  ',
+                style: TextStyle(
+                    color: Colors.red,
+                    fontFamily: 'SF-Pro',
+                    fontSize: FontSize.s14,
+                    fontWeight: FontWeight.w500,
+                    fontStyle: FontStyle.normal,
+                    letterSpacing: Sizes.s1,
+                    height: Sizes.s1
+                ),
+                children: <TextSpan>[
+                  TextSpan(text: error)
+                ],
+              ),
+            )
+          ],
+        ),
+      ),
+    ),
+  );
 }
 

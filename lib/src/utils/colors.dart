@@ -18,3 +18,4 @@ final Color colorPrimary = Color(0xff3D6BDF);
 final Color colorSecondary = Color(0xe63d6bdf);
 final Color colorActivateCardCurrency = Color(0xffb4c5f1);
 final Color colorIconAction = Color(0xff4f6ef7);
+final Color errorDisplayColor = Color(0xffFCF2F2);

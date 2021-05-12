@@ -5,6 +5,7 @@ import 'package:coinpay/src/helpers/navigation.dart';
 import 'package:coinpay/src/utils/themes.dart';
 import 'package:coinpay/src/utils/sizes.dart';
 import 'package:coinpay/src/screens/sliderscreen/SliderScreenUI.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 class SplashscreenUI extends StatefulWidget {
   @override
@@ -31,9 +32,9 @@ class _SplashscreenUIState extends State<SplashscreenUI> {
         height: double.maxFinite,
         decoration: BoxDecoration(gradient: splashGradient()),
         child: Center(
-          child: Image.asset(
-            "assets/images/icons/app_logo.png",
-            height: Sizes.s180,
+          child: SvgPicture.asset(
+            "assets/images/icons/logo_coinpay.svg",
+            height: Sizes.s120,
           ),
         ),
       ),

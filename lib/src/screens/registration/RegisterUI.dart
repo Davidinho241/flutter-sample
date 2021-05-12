@@ -42,6 +42,8 @@ class _RegisterUIState extends State<RegisterUI> {
   bool status = false;
   bool enable = true;
   bool isValidateTermsAndPolicy = false;
+  bool hasError = false;
+  String error = "No error";
 
   bool _obscurePassword = true;
   Country _selectedFilteredDialogCountry =
@@ -54,27 +56,19 @@ class _RegisterUIState extends State<RegisterUI> {
     super.initState();
     inputFirstNameFocus = FocusNode();
     inputFirstNameFocus.addListener(() {
-      setState(() {
-        print("Has focus: ${inputFirstNameFocus.hasFocus}");
-      });
+      setState(() {});
     });
     inputLastNameFocus = FocusNode();
     inputLastNameFocus.addListener(() {
-      setState(() {
-        print("Has focus: ${inputLastNameFocus.hasFocus}");
-      });
+      setState(() {});
     });
     inputPhoneFocus = FocusNode();
     inputPhoneFocus.addListener(() {
-      setState(() {
-        print("Has focus: ${inputPhoneFocus.hasFocus}");
-      });
+      setState(() {});
     });
     inputPasswordFocus = FocusNode();
     inputPasswordFocus.addListener(() {
-      setState(() {
-        print("Has focus: ${inputPasswordFocus.hasFocus}");
-      });
+      setState(() {});
     });
   }
   @override
@@ -154,17 +148,23 @@ class _RegisterUIState extends State<RegisterUI> {
     }
 
     String _validatePhone(String value) {
+      Pattern pattern = r'^(?:[+0])?[0-9]{5}|[0-9]{6}|[0-9]{7}|[0-9]{8}|[0-9]{9}|[0-9]{10}$/';
+      RegExp regex = new RegExp(pattern);
+
       if (isRequired(value)) return "${lang.translate('screen.register.emptyFieldMessage')}" ;
 
-      if (value.length < 9) return "${lang.translate('screen.register.invalidLengthPhoneMessage')}";
+      if (!regex.hasMatch(value)) return "${lang.translate('screen.register.invalidLengthPhoneMessage')}";
 
       return null;
     }
 
     String _validatePassword(String value) {
+      String  pattern = r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#\$&*~]).{8,}$';
+      RegExp regExp = new RegExp(pattern);
+
       if (isRequired(value)) return "${lang.translate('screen.register.emptyFieldMessage')}";
 
-      if (value.length < 8) return "${lang.translate('screen.register.invalidLengthPasswordMessage')}";
+      if (!regExp.hasMatch(value)) return "${lang.translate('screen.register.invalidLengthPasswordMessage')}";
 
       return null;
     }
@@ -172,7 +172,9 @@ class _RegisterUIState extends State<RegisterUI> {
     return Scaffold(
       key: _scaffoldKey,
       body: Container(
-        margin: EdgeInsets.fromLTRB(Sizes.s15, Sizes.s40, Sizes.s15, 0),
+        margin: EdgeInsets.fromLTRB(Sizes.s15,
+            (MediaQuery.of(context).size.width < 400 || MediaQuery.of(context).size.height < 400) ? Sizes.s60 : Sizes.s90,
+            Sizes.s15, 0),
         width: double.maxFinite,
         height: double.maxFinite,
         child: SingleChildScrollView(
@@ -181,7 +183,6 @@ class _RegisterUIState extends State<RegisterUI> {
             key: _formKey,
             child: Column(
               children: <Widget>[
-                SizedBox(height: Sizes.s8),
                 Align(
                   alignment: Alignment.bottomLeft,
                   child: TextTitle(

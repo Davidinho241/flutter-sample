@@ -110,9 +110,12 @@ class _ForgotPasswordUIState extends State<ForgotPasswordUI> {
     var lang = AppLocalizations.of(context);
 
     String _validatePhone(String value) {
+      Pattern pattern = r'^(?:[+0])?[0-9]{5}|[0-9]{6}|[0-9]{7}|[0-9]{8}|[0-9]{9}|[0-9]{10}$/';
+      RegExp regex = new RegExp(pattern);
+
       if (isRequired(value)) return "${lang.translate('screen.register.emptyFieldMessage')}" ;
 
-      if (value.length < 4) return "${lang.translate('screen.register.invalidLengthPhoneMessage')}";
+      if (!regex.hasMatch(value)) return "${lang.translate('screen.register.invalidLengthPhoneMessage')}";
 
       return null;
     }

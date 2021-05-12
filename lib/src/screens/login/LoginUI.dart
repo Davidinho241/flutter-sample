@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:coinpay/src/controllers/UserController.dart';
 import 'package:coinpay/src/env/routesAuth.dart';
 import 'package:coinpay/src/helpers/dialog.dart';
@@ -11,6 +13,7 @@ import 'package:coinpay/src/services/prefs_service.dart';
 import 'package:coinpay/src/utils/colors.dart';
 import 'package:coinpay/src/utils/sizes.dart';
 import 'package:coinpay/src/widgets/buttons.dart';
+import 'package:coinpay/src/widgets/common_widgets.dart';
 import 'package:coinpay/src/widgets/inputs.dart';
 import 'package:coinpay/src/widgets/texts.dart';
 import 'package:flutter/material.dart';
@@ -19,6 +22,7 @@ import 'package:country_pickers/country.dart';
 import 'package:country_pickers/country_picker_dialog.dart';
 import 'package:country_pickers/utils/utils.dart';
 import 'package:coinpay/src/helpers/validation.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class LoginUI extends StatefulWidget {
@@ -36,6 +40,8 @@ class _LoginUIState extends State<LoginUI> {
   PersistentBottomSheetController persistentBottomSheetController;
   bool status = false;
   bool enable = true;
+  bool hasError = false;
+  String error = "No error";
 
   bool _obscurePassword = true;
   Country _selectedFilteredDialogCountry =
@@ -124,17 +130,23 @@ class _LoginUIState extends State<LoginUI> {
     var lang = AppLocalizations.of(context);
 
     String _validatePhone(String value) {
+      Pattern pattern = r'^(?:[+0])?[0-9]{5}|[0-9]{6}|[0-9]{7}|[0-9]{8}|[0-9]{9}|[0-9]{10}$/';
+      RegExp regex = new RegExp(pattern);
+
       if (isRequired(value)) return "${lang.translate('screen.register.emptyFieldMessage')}" ;
 
-      if (value.length < 9) return "${lang.translate('screen.register.invalidLengthPhoneMessage')}";
+      if (!regex.hasMatch(value)) return "${lang.translate('screen.register.invalidLengthPhoneMessage')}";
 
       return null;
     }
 
     String _validatePassword(String value) {
+      String  pattern = r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#\$&*~]).{8,}$';
+      RegExp regExp = new RegExp(pattern);
+
       if (isRequired(value)) return "${lang.translate('screen.register.emptyFieldMessage')}";
 
-      if (value.length < 8) return "${lang.translate('screen.register.invalidLengthPasswordMessage')}";
+      if (!regExp.hasMatch(value)) return "${lang.translate('screen.register.invalidLengthPasswordMessage')}";
 
       return null;
     }
@@ -175,6 +187,10 @@ class _LoginUIState extends State<LoginUI> {
                 ),
                 SizedBox(
                   height: Sizes.s50,
+                ),
+                hasError ? displayError(context, error: error) : Container(),
+                SizedBox(
+                  height: Sizes.s30,
                 ),
                 OutlineTextField(
                   prefixIcon: Container(
@@ -256,6 +272,9 @@ class _LoginUIState extends State<LoginUI> {
                   child: ButtonSystemTheme(
                     title: "${lang.translate('screen.login.loginButton')}",
                     onTap: () async {
+                      setState(() {
+                        hasError = false;
+                      });
                       if(_formKey.currentState.validate()){
                         persistentBottomSheetController = _scaffoldKey.currentState.showBottomSheet((context) =>
                             Container(
@@ -277,13 +296,24 @@ class _LoginUIState extends State<LoginUI> {
                               await sharedPrefService.setPhone(_selectedFilteredDialogCountry.phoneCode+phoneController.text);
                               openRemovePage(context, ValidateOtpUI(action: 'login'));
                             }else if(data['code'] == 1002){
-                              await dialogShow(context, "Oops an error !!!", "${lang.translate('screen.register.errorPhoneValidation')}");
+                              setState(() {
+                                hasError = true;
+                                if (data['data']['password'] != null){
+                                  error = data['data']['password']['message'];
+                                }
+                              });
                             }else {
-                              await dialogShow(context, "Oops an error !!!", data['message']);
+                              setState(() {
+                                hasError = true;
+                                error = data['message'];
+                              });
                             }
                           }).catchError((onError) async{
                             print(onError);
-                            await dialogShow(context, "Oops an error !!!", "${lang.translate('screen.register.errorMessage')}");
+                            setState(() {
+                              hasError = true;
+                              error = "${lang.translate('screen.register.errorMessage')}";
+                            });
                           }).whenComplete(() => {
                             print('Data receive'),
                           }),

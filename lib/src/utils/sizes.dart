@@ -37,6 +37,7 @@ class Sizes {
   static double s45 = 45.0;
   static double s48 = 48.0;
   static double s50 = 50.0;
+  static double s55 = 55.0;
   static double s60 = 60.0;
   static double s65 = 65.0;
   static double s70 = 70.0;
